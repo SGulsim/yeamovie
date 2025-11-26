@@ -1,0 +1,76 @@
+.button {
+	@include flex-center($gap: $spacing-sm);
+	@include focus-outline($color-accent);
+	@include transition(all);
+	font-size: $font-size-md;
+	font-weight: 500;
+	border: none;
+	border-radius: $radius-lg;
+	cursor: pointer;
+
+	&.disabled {
+		@include disabled;
+	}
+
+	&.fullWidth {
+		width: 100%;
+	}
+}
+
+.primary {
+	color: $color-secondary;
+	background-color: $color-accent;
+
+	&:hover:not(.disabled) {
+		background-color: $color-hovered-accent;
+	}
+}
+
+.secondary {
+	color: $color-primary;
+	background-color: $color-secondary;
+	border: 1px solid $color-text;
+
+	&:hover:not(.disabled):not(.active) {
+		@include hover-background($color-primary, 0.1);
+	}
+
+	&.active {
+		background-color: $color-primary;
+		color: $color-secondary;
+	}
+}
+
+.outline {
+	color: $color-accent;
+	background-color: transparent;
+	border: 1px solid $color-accent;
+
+	&:hover:not(.disabled) {
+		@include hover-background($color-accent, 0.1);
+	}
+}
+
+.icon {
+	padding: $spacing-sm;
+	background-color: transparent;
+
+	&:hover:not(.disabled) {
+		@include hover-background($color-text, 0.1);
+	}
+}
+
+.sm {
+	@include padding-xy($spacing-md, $spacing-xs);
+	font-size: $font-size-sm;
+}
+
+.md {
+	@include padding-xy($spacing-2xl, $spacing-2sm);
+	font-size: $font-size-md;
+}
+
+.lg {
+	@include padding-xy($spacing-3xl, $spacing-md);
+	font-size: $font-size-lg;
+}

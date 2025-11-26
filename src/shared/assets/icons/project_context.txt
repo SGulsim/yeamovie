@@ -1,0 +1,1873 @@
+# PROJECT CONTEXT
+# Generated: 2025-11-16T15:18:01.649Z
+
+================================================================================
+
+## PROJECT STRUCTURE
+
+  index.html
+  package.json
+  src/app/layout/BaseLayout.tsx
+  src/components/breadcrumbItem/BreadcrumbItem.tsx
+  src/components/breadcrumbItem/styles.module.scss
+  src/components/breadcrumbs/Breadcrumbs.tsx
+  src/components/breadcrumbs/styles.module.scss
+  src/components/Separator/Separator.tsx
+  src/components/footer/Footer.tsx
+  src/components/footer/styles.module.scss
+  src/components/header/Header.tsx
+  src/components/header/styles.module.scss
+  src/components/image/Image.tsx
+  src/components/image/styles.module.scss
+  src/components/logo/Logo.tsx
+  src/components/logo/styles.module.scss
+  src/components/HeroBanner/HeroBanner.tsx
+  src/components/HeroBanner/styles.module.scss
+  src/components/VideoCard/VideoCard.tsx
+  src/components/VideoCard/styles.module.scss
+  src/components/VideoDescription/VideoDescription.tsx
+  src/components/VideoDescription/styles.module.scss
+  src/components/movieDetails/MovieDetails.tsx
+  src/components/movieDetails/styles.module.scss
+  src/components/FilterPanel/FilterPanel.tsx
+  src/components/FilterPanel/styles.module.scss
+  src/components/FilterPanel/FilterPanel.tsx
+  src/components/FilterPanel/styles.module.scss
+  src/components/VideoList/VideoList.tsx
+  src/components/VideoList/styles.module.scss
+  src/components/ContentCatalog/ContentCatalog.tsx
+  src/components/navigation/Navigation.tsx
+  src/components/navigation/styles.module.scss
+  src/components/HeroDescription/HeroDescription.tsx
+  src/components/HeroDescription/styles.module.scss
+  src/components/search/Search.tsx
+  src/components/search/styles.module.scss
+  src/components/select/Select.tsx
+  src/components/select/styles.module.scss
+  src/components/sortControls/SortControls.tsx
+  src/components/sortControls/styles.module.scss
+  src/components/tab/Tab.tsx
+  src/components/tab/styles.module.scss
+  src/components/tabs/Tabs.tsx
+  src/components/tabs/styles.module.scss
+  src/main.tsx
+  src/pages/mainPage/MainPage.tsx
+  src/pages/moviePage/MoviePage.tsx
+  src/pages/searchPage/SearchPage.tsx
+  src/styles/_global.scss
+  src/styles/_typography.scss
+  src/styles/index.scss
+  src/styles/utils/_index.scss
+  src/styles/utils/_mixins.scss
+  src/styles/utils/_reset.scss
+  src/styles/utils/_variables.scss
+  src/ui/button/Button.tsx
+  src/ui/button/styles.module.scss
+  tsconfig.json
+  tsconfig.node.json
+  vite.config.ts
+
+================================================================================
+
+## FILES CONTENT
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: index.html
+────────────────────────────────────────────────────────────────────────────────
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>yeamovie</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: package.json
+────────────────────────────────────────────────────────────────────────────────
+
+{
+	"name": "yeamovie",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"lint": "eslint .",
+		"preview": "vite preview",
+		"collect": "node collect-project.mjs"
+	},
+	"dependencies": {
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0",
+		"react-router-dom": "^7.9.6"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.39.1",
+		"@types/node": "^24.10.1",
+		"@types/react": "^19.2.2",
+		"@types/react-dom": "^19.2.2",
+		"@vitejs/plugin-react": "^5.1.0",
+		"eslint": "^9.39.1",
+		"eslint-plugin-react-hooks": "^7.0.1",
+		"eslint-plugin-react-refresh": "^0.4.24",
+		"globals": "^16.5.0",
+		"sass-embedded": "^1.93.3",
+		"scss-reset": "^1.4.6",
+		"typescript": "~5.9.3",
+		"typescript-eslint": "^8.46.3",
+		"vite": "^7.2.2"
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/app/layout/BaseLayout.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import Footer from '@/components/footer/Footer';
+import Header from '@/components/header/Header';
+import '@styles/_global.scss';
+import { Outlet } from 'react-router-dom';
+
+const BaseLayout = () => {
+	return (
+		<>
+			<Header />
+
+			<div className='container'>
+				<Outlet />
+			</div>
+
+			<Footer />
+		</>
+	);
+};
+
+export default BaseLayout;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/breadcrumbItem/BreadcrumbItem.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import Separator from '../Separator/Separator';
+import styles from './styles.module.scss';
+import { Link } from 'react-router-dom';
+
+const BreadcrumbItem = ({ children, to, direction = 'next' }) => {
+	return (
+		<Link to={to}>
+			<div
+				className={`${styles.breadcrumbsItem} ${
+					direction === 'next' ? styles.next : styles.prev
+				}`}
+			>
+				{direction === 'back' && <Separator direction='left' />}
+				{children}
+				{direction === 'next' && <Separator direction='right' />}
+			</div>
+		</Link>
+	);
+};
+
+export default BreadcrumbItem;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/breadcrumbItem/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.breadcrumbsItem {
+	@include flex-align($gap: $spacing-md);
+	@include transition(color);
+	margin-bottom: $spacing-lg;
+
+	&:hover {
+		color: $color-accent;
+	}
+
+	&.next {
+		margin-left: auto;
+	}
+
+	&.prev {
+		margin-right: auto;
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/breadcrumbs/Breadcrumbs.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+
+const Breadcrumbs = ({ children }) => {
+	return <nav className={styles.breadcrumbs}>{children}</nav>;
+};
+
+export default Breadcrumbs;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/breadcrumbs/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.breadcrumbs {
+	display: flex;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/Separator/Separator.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import arrowLeft from '@assets/icons/arrowLeft.svg';
+import arrowRight from '@assets/icons/arrowRight.svg';
+import arrowDown from '@assets/icons/arrowDown.svg';
+import arrowUp from '@assets/icons/arrowUp.svg';
+import arrowSelect from '@assets/icons/arrowSelect.svg';
+
+const Separator = ({ direction = 'left' }) => {
+	const icons = {
+		left: arrowLeft,
+		right: arrowRight,
+		up: arrowUp,
+		down: arrowDown,
+		select: arrowSelect,
+	};
+	return <img src={icons[direction]} alt={direction} />;
+};
+
+export default Separator;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/footer/Footer.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import Logo from '../logo/Logo';
+import Navigation from '../navigation/Navigation';
+import styles from './styles.module.scss';
+
+const Footer = () => {
+	return (
+		<footer className={styles.footer}>
+			<Logo />
+			<Navigation />
+		</footer>
+	);
+};
+
+export default Footer;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/footer/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.footer {
+	@include flex-between;
+	padding: $spacing-2xl;
+	background-color: $color-primary;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/header/Header.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import Logo from '../logo/Logo';
+import Search from '../search/Search';
+import styles from './styles.module.scss';
+
+const Header = () => {
+	return (
+		<header className={styles.header}>
+			<Logo />
+			<Search />
+		</header>
+	);
+};
+
+export default Header;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/header/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.header {
+	@include flex-align($gap: 124px);
+	@include padding-xy(calc($spacing-2xl * 2), $spacing-md);
+	font-weight: 400;
+	background-color: $color-primary;
+	color: $color-accent;
+}
+
+.logo {
+	font-family: 'Bayon';
+	letter-spacing: 5px;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/image/Image.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+
+const Image = ({ src, alt }) => {
+	return (
+		<div className={styles.image}>
+			<img src={src} alt={alt} />
+		</div>
+	);
+};
+
+export default Image;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/image/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.image {
+	@include rounded($radius-sm);
+
+	img {
+		@include responsive-image;
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/logo/Logo.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import { Link } from 'react-router-dom';
+import styles from './styles.module.scss';
+
+const Logo = () => {
+	return (
+		<Link to={'/'}>
+			<h2 className={styles.logo}>kinomonster</h2>
+		</Link>
+	);
+};
+
+export default Logo;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/logo/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.logo {
+	font-family: 'Bayon';
+	letter-spacing: 5px;
+	color: $color-accent;
+	text-transform: uppercase;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/HeroBanner/HeroBanner.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import banner from '@assets/images/banner.png';
+import HeroDescription from '@components/HeroDescription/HeroDescription';
+import Image from '@components/image/Image';
+
+const HeroBanner = () => {
+	return (
+		<section className={styles.banner}>
+			<HeroDescription movieName={'Чужой: Ромул (2024)'} />
+			<Image src={banner} alt={'banner'} />
+		</section>
+	);
+};
+
+export default HeroBanner;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/HeroBanner/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.banner {
+	@include flex-align($gap: calc($spacing-xl * 1.25));
+	@include section-spacing($spacing-3xl);
+	@include rounded($radius-sm);
+	padding: $spacing-xl;
+	background-color: $color-primary;
+}
+
+.headerText {
+	text-transform: uppercase;
+	margin-bottom: calc($spacing-3xl + 40px);
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/VideoCard/VideoCard.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import previewCard from '@assets/images/previewCard.png';
+import Image from '../image/Image';
+import VideoDescription from '../VideoDescription/VideoDescription';
+import { Link } from 'react-router-dom';
+
+const VideoCard = ({ title, year, rating }) => {
+	return (
+		<li className={styles.item}>
+			<Link to='movie'>
+				<Image src={previewCard} alt={title} />
+				<VideoDescription title={title} year={year} rating={rating} />
+			</Link>
+		</li>
+	);
+};
+
+export default VideoCard;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/VideoCard/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.item {
+	@include flex-column($gap: $spacing-sm);
+	@include hover-scale(1.02);
+	cursor: pointer;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/VideoDescription/VideoDescription.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+
+const VideoDescription = ({ title, year, rating }) => {
+	return (
+		<div className={styles.description}>
+			<div className={styles.info}>
+				<h4 className={styles.title} title={title}>
+					{title}
+				</h4>
+				<span className={styles.year} aria-label='Год выпуска'>
+					{year}
+				</span>
+			</div>
+			<span className={styles.rating} aria-label='Рейтинг'>
+				⭐ {rating.toFixed(1)}
+			</span>
+		</div>
+	);
+};
+
+export default VideoDescription;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/VideoDescription/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.description {
+	@include flex-align($gap: $spacing-2sm);
+}
+
+.title {
+	@include text-ellipsis;
+	@include transition(color);
+	font-size: $font-size-lg;
+	font-weight: 600;
+	color: $color-primary;
+
+	&:hover {
+		color: $color-accent;
+	}
+}
+
+.info {
+	@include flex-column($gap: $spacing-xs);
+	flex: 1;
+	font-size: $font-size-sm;
+}
+
+.year {
+	flex: 1;
+}
+
+.rating {
+	align-self: flex-end;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/movieDetails/MovieDetails.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import BreadcrumbItem from '../breadcrumbItem/BreadcrumbItem';
+import Breadcrumbs from '../breadcrumbs/Breadcrumbs';
+import HeroBanner from '../HeroBanner/HeroBanner';
+import HeroDescription from '../HeroDescription/HeroDescription';
+import styles from './styles.module.scss';
+
+const MovieDetails = () => {
+	return (
+		<div className={styles.details}>
+			<Breadcrumbs>
+				<BreadcrumbItem to='/' direction='back'>
+					Главная
+				</BreadcrumbItem>
+			</Breadcrumbs>
+			<HeroBanner />
+		</div>
+	);
+};
+
+export default MovieDetails;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/movieDetails/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.details {
+	margin-bottom: $spacing-3xl;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/FilterPanel/FilterPanel.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import Select from '../select/Select';
+import SortControls from '../sortControls/SortControls';
+
+const genres = [
+	{ value: 'horror', label: 'Ужасы' },
+	{ value: 'action', label: 'Боевик' },
+	{ value: 'comedy', label: 'Комедия' },
+	{ value: 'drama', label: 'Драма' },
+	{ value: 'thriller', label: 'Триллер' },
+	{ value: 'fantasy', label: 'Фантастика' },
+	{ value: 'detective', label: 'Детектив' },
+	{ value: 'romance', label: 'Романтика' },
+	{ value: 'adventure', label: 'Приключения' },
+	{ value: 'animation', label: 'Мультфильм' },
+];
+
+const countries = [
+	{ value: 'russia', label: 'Россия' },
+	{ value: 'usa', label: 'США' },
+	{ value: 'uk', label: 'Великобритания' },
+	{ value: 'france', label: 'Франция' },
+	{ value: 'germany', label: 'Германия' },
+	{ value: 'italy', label: 'Италия' },
+	{ value: 'spain', label: 'Испания' },
+	{ value: 'japan', label: 'Япония' },
+	{ value: 'korea', label: 'Южная Корея' },
+	{ value: 'china', label: 'Китай' },
+];
+
+const years = [
+	{ value: '2024', label: '2024' },
+	{ value: '2023', label: '2023' },
+	{ value: '2022', label: '2022' },
+	{ value: '2021', label: '2021' },
+	{ value: '2020', label: '2020' },
+	{ value: '2019', label: '2019' },
+	{ value: '2018', label: '2018' },
+	{ value: '2017', label: '2017' },
+	{ value: '2016', label: '2016' },
+	{ value: '2015', label: '2015' },
+];
+
+const ages = [
+	{ value: '0', label: '0+' },
+	{ value: '6', label: '6+' },
+	{ value: '12', label: '12+' },
+	{ value: '16', label: '16+' },
+	{ value: '18', label: '18+' },
+];
+
+const productions = [
+	{ value: 'russia', label: 'Россия' },
+	{ value: 'usa', label: 'США' },
+	{ value: 'europe', label: 'Европа' },
+	{ value: 'asia', label: 'Азия' },
+];
+
+const FilterPanel = () => {
+	return (
+		<div className={styles.filters}>
+			<Select options={genres} />
+			<Select options={countries} />
+			<Select options={years} />
+			<Select options={ages} />
+			<Select options={productions} />
+			<SortControls />
+		</div>
+	);
+};
+
+export default FilterPanel;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/FilterPanel/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.filters {
+	@include flex-align($gap: $spacing-lg);
+	margin-top: $spacing-2xl;
+	@include section-spacing($spacing-3xl);
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/FilterPanel/FilterPanel.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import FilterPanel from '../FilterPanel/FilterPanel';
+import VideoList from '../VideoList/VideoList';
+import Tab from '../tab/Tab';
+
+const FilterPanel = () => {
+	return (
+		<section>
+			<Tab>Фильмы по категориям</Tab>
+			<FilterPanel />
+			<VideoList />
+		</section>
+	);
+};
+
+export default FilterPanel;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/FilterPanel/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/VideoList/VideoList.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import VideoCard from '../VideoCard/VideoCard';
+import styles from './styles.module.scss';
+
+const movies = [
+	{
+		title: 'Интерстеллар',
+		year: 2014,
+		rating: 8.6,
+	},
+	{
+		title: 'Начало',
+		year: 2010,
+		rating: 8.8,
+	},
+	{
+		title: 'Темный рыцарь',
+		year: 2008,
+		rating: 9.0,
+	},
+	{
+		title: 'Бойцовский клуб',
+		year: 1999,
+		rating: 8.8,
+	},
+	{
+		title: 'Матрица',
+		year: 1999,
+		rating: 8.7,
+	},
+	{
+		title: 'Побег из Шоушенка',
+		year: 1994,
+		rating: 9.3,
+	},
+	{
+		title: 'Форрест Гамп',
+		year: 1994,
+		rating: 8.8,
+	},
+	{
+		title: 'Криминальное чтиво',
+		year: 1994,
+		rating: 8.9,
+	},
+];
+
+const VideoList = () => {
+	return (
+		<ul className={styles.list}>
+			{movies &&
+				movies?.map(movie => (
+					<VideoCard
+						key={movie.title}
+						title={movie.title}
+						year={movie.year}
+						rating={movie.rating}
+					/>
+				))}
+		</ul>
+	);
+};
+
+export default VideoList;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/VideoList/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.list {
+	@include grid-responsive(4, 2, 1, $spacing-lg);
+	@include section-spacing(calc(6.25 * $spacing-md));
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/ContentCatalog/ContentCatalog.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import Breadcrumbs from '@components/breadcrumbs/Breadcrumbs';
+import BreadcrumbItem from '@components/breadcrumbItem/BreadcrumbItem';
+import VideoList from '@components/VideoList/VideoList';
+import Tab from '@components/tab/Tab';
+import Tabs from '@components/tabs/Tabs';
+
+const ContentCatalog = () => {
+	return (
+		<section>
+			{/* onTabChange={handleTabChange} */}
+			<Tabs>
+				<Tab>Популярные фильмы</Tab>
+				<Tab>Популярные сериалы</Tab>
+				<Tab>Подборка фильмов</Tab>
+			</Tabs>
+			<Breadcrumbs>
+				<BreadcrumbItem children={'Смотреть все'} to={'movie'} />
+			</Breadcrumbs>
+			<VideoList />
+		</section>
+	);
+};
+
+export default ContentCatalog;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/navigation/Navigation.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import { Link } from 'react-router-dom';
+
+const Navigation = () => {
+	return (
+		<nav className={styles.navigation}>
+			<Link to={'/'}>Главная</Link>
+			<Link to={'/popular-movies'}>Популярные фильмы</Link>
+			<Link to={'/popular-series'}>Популярные сериалы</Link>
+		</nav>
+	);
+};
+
+export default Navigation;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/navigation/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.navigation {
+	@include flex-align($gap: $spacing-1xl);
+	color: $color-text-lighter;
+
+	a {
+		@include transition(color);
+
+		&:hover {
+			color: $color-accent;
+		}
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/HeroDescription/HeroDescription.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import Button from '@/ui/button/Button';
+import styles from './styles.module.scss';
+
+const HeroDescription = ({ movieName }) => {
+	return (
+		<article className={styles.poster}>
+			<h3 className={styles.headerText}>уже в кино</h3>
+			<h1 className={styles.movieName}>{movieName}</h1>
+			<p className={styles.description}>
+				Исследуя заброшенную космическую станцию, группа колонизаторов
+				сталкивается с самой ужасающей формой жизни во Вселенной.
+			</p>
+			<Button onClick={() => 'click'} ariaLabel='Смотреть фильм'>
+				Смотреть
+			</Button>
+		</article>
+	);
+};
+
+export default HeroDescription;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/HeroDescription/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.poster {
+	color: $color-secondary;
+	flex: 1;
+}
+
+.headerText {
+	text-transform: uppercase;
+	margin-bottom: calc($spacing-3xl + 40px);
+}
+
+.movieName {
+	margin-bottom: $spacing-lg;
+}
+
+.description {
+	font-size: $font-size-lg;
+	@include section-spacing($spacing-3xl);
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/search/Search.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import searchIconUrl from '@assets/icons/search.svg';
+
+const Search = () => {
+	return (
+		<div className={styles.searchWrapper}>
+			<input
+				type='text'
+				placeholder='Поиск фильмов...'
+				className={styles.searchInput}
+			/>
+			<img
+				className={styles.searchIcon}
+				src={searchIconUrl}
+				alt='поиск фильмов'
+			/>
+		</div>
+	);
+};
+
+export default Search;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/search/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.searchWrapper {
+	position: relative;
+	width: 100%;
+	max-width: 400px;
+}
+
+.searchInput {
+	width: 100%;
+	@include padding-xy($spacing-lg, $spacing-2sm);
+	padding-right: $spacing-2xl;
+	@include focus-border($color-accent);
+	@include transition(border-color);
+	border: 2px solid rgba(0, 0, 0, 0.1);
+	border-radius: $radius-lg;
+	font-size: $font-size-md;
+}
+
+.searchIcon {
+	@include absolute-vertical-center;
+	right: $spacing-lg;
+	cursor: pointer;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/select/Select.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+
+const Select = ({ options }) => {
+	return (
+		<select className={styles.select}>
+			{options?.map(option => (
+				<option
+					className={styles.option}
+					key={option.value}
+					value={option.value}
+				>
+					{option.label}
+				</option>
+			))}
+		</select>
+	);
+};
+
+export default Select;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/select/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.select {
+	appearance: none;
+	@include rounded($radius-lg);
+	@include padding-xy($spacing-md, $spacing-2sm);
+	@include focus-border(rgba($color-text, 0.5));
+	@include transition(border-color);
+	padding-right: $spacing-xl;
+	color: $color-text;
+	border-color: $color-text;
+	background-color: transparent;
+	background-image: url('@assets/icons/arrowSelect.svg');
+	background-repeat: no-repeat;
+	background-position: right $spacing-sm center;
+	background-size: 16px;
+
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/sortControls/SortControls.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import Separator from '../Separator/Separator';
+import Button from '@/ui/button/Button';
+
+const SortControls = () => {
+	return (
+		<Button variant='icon' ariaLabel='Сортировка'>
+			<Separator direction='down' />
+			<Separator direction='up' />
+		</Button>
+	);
+};
+
+export default SortControls;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/sortControls/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/tab/Tab.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import Button from '@/ui/button/Button';
+import styles from './styles.module.scss';
+
+const Tab = ({ children, isActive = true, onClick }) => {
+	return (
+		<Button active={isActive} variant='secondary' onClick={onClick}>
+			{children}
+		</Button>
+	);
+};
+
+export default Tab;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/tab/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.tab {
+	background-color: $color-secondary;
+	border-radius: $radius-lg;
+	color: $color-primary;
+	padding: $spacing-2sm $spacing-xl;
+	font-size: $font-size-md;
+
+	&.active {
+		background-color: $color-primary;
+		color: $color-secondary;
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/tabs/Tabs.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+
+const Tabs = ({ children, activeIndex = 0, onChange }) => {
+	return <section className={styles.tabs}>{children}</section>;
+};
+
+export default Tabs;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/components/tabs/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.tabs {
+	@include flex-align(50);
+	margin-bottom: $spacing-3xl;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/main.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './styles/index.scss';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import MoviePage from './pages/moviePage/MoviePage.tsx';
+import SearchPage from './pages/searchPage/SearchPage.tsx';
+import BaseLayout from './app/layout/BaseLayout.tsx';
+import MainPage from './pages/mainPage/MainPage.tsx';
+
+createRoot(document.getElementById('root')!).render(
+	<StrictMode>
+		<BrowserRouter>
+			<Routes>
+				<Route path='/' element={<BaseLayout />}>
+					<Route index element={<MainPage />} />
+					<Route path='movie' element={<MoviePage />} />
+					<Route path='search' element={<SearchPage />} />
+				</Route>
+			</Routes>
+		</BrowserRouter>
+	</StrictMode>
+);
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/pages/mainPage/MainPage.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import HeroBanner from '@/components/HeroBanner/HeroBanner';
+import FilterPanel from '@/components/FilterPanel/FilterPanel';
+import ContentCatalog from '@/components/ContentCatalog/ContentCatalog';
+
+const MainPage = () => {
+	return (
+		<main>
+			<HeroBanner />
+			<ContentCatalog />
+			<FilterPanel />
+		</main>
+	);
+};
+
+export default MainPage;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/pages/moviePage/MoviePage.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import MovieDetails from '@/components/movieDetails/MovieDetails';
+
+const MoviePage = () => {
+	return (
+		<div>
+			<MovieDetails />
+		</div>
+	);
+};
+
+export default MoviePage;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/pages/searchPage/SearchPage.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+const SearchPage = () => {
+	return <div>SearchPage</div>;
+};
+
+export default SearchPage;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/styles/_global.scss
+────────────────────────────────────────────────────────────────────────────────
+
+@use 'utils' as *;
+
+.container {
+	margin: 0 auto;
+	padding: $spacing-3xl;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/styles/_typography.scss
+────────────────────────────────────────────────────────────────────────────────
+
+@use 'utils/variables' as *;
+
+@font-face {
+	font-family: 'MyFont';
+	src: url('@assets/fonts/MyFont.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Bayon';
+	src: url('@assets/fonts/Bayon.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0;
+	font-weight: 600;
+	line-height: 1.2;
+}
+
+h1 {
+	font-size: $font-size-3xl;
+	letter-spacing: 5px;
+}
+
+h2 {
+	font-size: $font-size-2xl;
+}
+
+h3 {
+	font-size: $font-size-xl;
+}
+
+p {
+	margin: 0;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/styles/index.scss
+────────────────────────────────────────────────────────────────────────────────
+
+@use 'utils' as *;
+
+@use 'utils/reset' as custom;
+
+@use 'typography';
+@use 'global';
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/styles/utils/_index.scss
+────────────────────────────────────────────────────────────────────────────────
+
+@forward 'variables';
+@forward 'mixins';
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/styles/utils/_mixins.scss
+────────────────────────────────────────────────────────────────────────────────
+
+@use 'variables' as *;
+
+@mixin flex-header {
+	display: flex;
+	gap: 124px;
+	align-items: center;
+}
+
+@mixin flex-around {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+@mixin flex-center($gap: 0) {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	@if $gap != 0 {
+		gap: $gap;
+	}
+}
+
+@mixin flex-align($gap: 0, $justify: flex-start) {
+	display: flex;
+	align-items: center;
+	justify-content: $justify;
+	@if $gap != 0 {
+		gap: $gap;
+	}
+}
+
+@mixin flex-between($gap: 0) {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	@if $gap != 0 {
+		gap: $gap;
+	}
+}
+
+@mixin flex-around($gap: 0) {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	@if $gap != 0 {
+		gap: $gap;
+	}
+}
+
+@mixin flex-column($gap: 0, $align: stretch) {
+	display: flex;
+	flex-direction: column;
+	align-items: $align;
+	@if $gap != 0 {
+		gap: $gap;
+	}
+}
+
+@mixin grid-auto($min-width: 250px, $gap: $spacing-lg) {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+	gap: $gap;
+}
+
+@mixin grid-columns($columns: 4, $gap: $spacing-lg) {
+	display: grid;
+	grid-template-columns: repeat($columns, 1fr);
+	gap: $gap;
+}
+
+@mixin grid-responsive($desktop: 4, $tablet: 2, $mobile: 1, $gap: $spacing-lg) {
+	display: grid;
+	grid-template-columns: repeat($desktop, 1fr);
+	gap: $gap;
+
+	@media (max-width: $breakpoint-tablet) {
+		grid-template-columns: repeat($tablet, 1fr);
+	}
+
+	@media (max-width: $breakpoint-mobile) {
+		grid-template-columns: repeat($mobile, 1fr);
+	}
+}
+
+@mixin text-ellipsis {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+@mixin text-clamp($lines: 2) {
+	display: -webkit-box;
+	-webkit-line-clamp: $lines;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+@mixin heading($size, $weight: 600, $spacing: 0) {
+	font-size: $size;
+	font-weight: $weight;
+	line-height: 1.2;
+	margin: 0;
+	@if $spacing != 0 {
+		letter-spacing: $spacing;
+	}
+}
+
+@mixin transition(
+	$properties: all,
+	$duration: 0.2s,
+	$timing: ease,
+	$delay: 0s
+) {
+	transition: $properties $duration $timing $delay;
+}
+
+@mixin transitions($transitions...) {
+	transition: $transitions;
+}
+
+@mixin hover-opacity($opacity: 0.8) {
+	cursor: pointer;
+	transition: opacity 0.2s ease;
+
+	&:hover {
+		opacity: $opacity;
+	}
+}
+
+@mixin hover-background($color, $opacity: 0.1) {
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+	&:hover {
+		color: $color;
+		background-color: rgba($color, $opacity);
+	}
+}
+
+@mixin hover-scale($scale: 1.05) {
+	cursor: pointer;
+	transition: transform 0.2s ease;
+
+	&:hover {
+		transform: scale($scale);
+	}
+}
+
+@mixin rounded($radius: $radius-sm) {
+	border-radius: $radius;
+	overflow: hidden;
+}
+
+@mixin circle($size) {
+	width: $size;
+	height: $size;
+	border-radius: 50%;
+}
+
+@mixin square($size) {
+	width: $size;
+	height: $size;
+}
+
+@mixin absolute-center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@mixin absolute-vertical-center {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+@mixin cover-parent {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+@mixin focus-outline($color: $color-accent, $offset: 2px, $width: 2px) {
+	&:focus-visible {
+		outline: $width solid $color;
+		outline-offset: $offset;
+	}
+}
+
+@mixin focus-border($color: $color-accent) {
+	&:focus {
+		border-color: $color;
+		outline: none;
+	}
+}
+
+@mixin disabled {
+	&:disabled,
+	&.disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		pointer-events: none;
+	}
+}
+
+@mixin active-state($bg-color, $text-color: null) {
+	&.active {
+		background-color: $bg-color;
+		@if $text-color {
+			color: $text-color;
+		}
+	}
+}
+
+@mixin section-spacing($spacing: $spacing-3xl) {
+	margin-bottom: $spacing;
+}
+
+@mixin padding-xy($x, $y) {
+	padding: $y $x;
+}
+
+@mixin margin-xy($x, $y) {
+	margin: $y $x;
+}
+
+@mixin mobile {
+	@media (max-width: $breakpoint-mobile) {
+		@content;
+	}
+}
+
+@mixin tablet {
+	@media (max-width: $breakpoint-tablet) {
+		@content;
+	}
+}
+
+@mixin desktop {
+	@media (min-width: $breakpoint-desktop) {
+		@content;
+	}
+}
+
+@mixin custom-breakpoint($width) {
+	@media (max-width: $width) {
+		@content;
+	}
+}
+
+@mixin responsive-image {
+	width: 100%;
+	height: auto;
+	display: block;
+	object-fit: cover;
+}
+
+@mixin aspect-ratio($width, $height) {
+	position: relative;
+	overflow: hidden;
+
+	&::before {
+		content: '';
+		display: block;
+		padding-top: calc(($height / $width) * 100%);
+	}
+
+	img,
+	video {
+		@include cover-parent;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+@mixin custom-scrollbar(
+	$width: 8px,
+	$track-color: transparent,
+	$thumb-color: $color-text
+) {
+	&::-webkit-scrollbar {
+		width: $width;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: $track-color;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: $thumb-color;
+		border-radius: $width;
+
+		&:hover {
+			background: darken($thumb-color, 10%);
+		}
+	}
+}
+
+@mixin hide-scrollbar {
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+@mixin visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+@mixin reset-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+@mixin reset-button {
+	background: none;
+	border: none;
+	padding: 0;
+	margin: 0;
+	cursor: pointer;
+	font: inherit;
+	color: inherit;
+}
+
+@mixin clearfix {
+	&::after {
+		content: '';
+		display: table;
+		clear: both;
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/styles/utils/_reset.scss
+────────────────────────────────────────────────────────────────────────────────
+
+@use 'variables' as *;
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 16px;
+}
+
+body {
+	font-family: $font-family;
+	font-size: $font-size-md;
+	line-height: 1.5;
+	color: $color-text;
+	background-color: $color-secondary;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea,
+select {
+	font-family: inherit;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+ul,
+ol {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+img {
+	max-width: 100%;
+	display: block;
+}
+
+button {
+	cursor: pointer;
+	border: none;
+	background: none;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/styles/utils/_variables.scss
+────────────────────────────────────────────────────────────────────────────────
+
+$color-primary: #080423;
+$color-secondary: #ffffff;
+$color-accent: #ff3d81;
+$color-text: #7a7a7a;
+$color-text-lighter: #fff9f9;
+
+$color-hovered-accent: #e73774;
+
+$font-family: 'MyFont', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+	sans-serif;
+
+$font-size-sm: 0.875rem; // 14px
+$font-size-md: 1rem; // 16px
+$font-size-lg: 1.125rem; // 18px
+$font-size-xl: 1.875rem; // 30px
+$font-size-2xl: 2.5rem; // 40px
+$font-size-3xl: 3.75rem; // 60px
+
+$spacing-xs: 0.25rem; // 4px
+$spacing-sm: 0.5rem; // 8px
+$spacing-2sm: 0.7rem; // 11px
+$spacing-md: 1rem; // 16px
+$spacing-lg: 1.5rem; // 24px
+$spacing-xl: 2rem; // 32px
+$spacing-1xl: 2.5rem; // 40px
+$spacing-2xl: 3rem; // 48px
+$spacing-3xl: 3.75rem; // 60px
+
+$radius-sm: 10px;
+$radius-lg: 60px;
+
+$breakpoint-mobile: 500px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/ui/button/Button.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+
+const Button = ({
+	children,
+	variant = 'primary',
+	size = 'md',
+	type = 'button',
+	disabled = false,
+	fullWidth = false,
+	active = false,
+	onClick,
+	className = '',
+	ariaLabel,
+}) => {
+	const buttonClasses = [
+		styles.button,
+		styles[variant],
+		styles[size],
+		styles[active],
+		active && styles.active,
+		fullWidth && styles.fullWidth,
+		disabled && styles.disabled,
+		className,
+	]
+		.filter(Boolean)
+		.join(' ');
+	return (
+		<button
+			type={type}
+			className={buttonClasses}
+			onClick={onClick}
+			disabled={disabled}
+			aria-label={ariaLabel}
+			aria-pressed={active}
+		>
+			{children}
+		</button>
+	);
+};
+
+export default Button;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/ui/button/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.button {
+	@include flex-center($gap: $spacing-sm);
+	@include focus-outline($color-accent);
+	@include transition(all);
+	font-size: $font-size-md;
+	font-weight: 500;
+	border: none;
+	border-radius: $radius-lg;
+	cursor: pointer;
+
+	&.disabled {
+		@include disabled;
+	}
+
+	&.fullWidth {
+		width: 100%;
+	}
+}
+
+.primary {
+	color: $color-secondary;
+	background-color: $color-accent;
+
+	&:hover:not(.disabled) {
+		background-color: $color-hovered-accent;
+	}
+}
+
+.secondary {
+	color: $color-primary;
+	background-color: $color-secondary;
+	border: 1px solid $color-text;
+
+	&:hover:not(.disabled) {
+		@include hover-background($color-primary, 0.1);
+	}
+
+	&.active {
+		@include active-state($color-primary, $color-secondary);
+		border-color: $color-primary;
+	}
+}
+
+.outline {
+	color: $color-accent;
+	background-color: transparent;
+	border: 1px solid $color-accent;
+
+	&:hover:not(.disabled) {
+		@include hover-background($color-accent, 0.1);
+	}
+}
+
+.icon {
+	padding: $spacing-sm;
+	background-color: transparent;
+
+	&:hover:not(.disabled) {
+		@include hover-background($color-text, 0.1);
+	}
+}
+
+.sm {
+	@include padding-xy($spacing-md, $spacing-xs);
+	font-size: $font-size-sm;
+}
+
+.md {
+	@include padding-xy($spacing-2xl, $spacing-2sm);
+	font-size: $font-size-md;
+}
+
+.lg {
+	@include padding-xy($spacing-3xl, $spacing-md);
+	font-size: $font-size-lg;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: tsconfig.json
+────────────────────────────────────────────────────────────────────────────────
+
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: tsconfig.node.json
+────────────────────────────────────────────────────────────────────────────────
+
+{
+	"compilerOptions": {
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+		"target": "ES2023",
+		"lib": ["ES2023"],
+		"module": "ESNext",
+		"types": ["node"],
+		"skipLibCheck": true,
+
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"moduleDetection": "force",
+		"noEmit": true,
+
+		/* Linting */
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"erasableSyntaxOnly": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedSideEffectImports": true
+	},
+	"include": ["vite.config.ts"]
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: vite.config.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+
+export default defineConfig({
+	plugins: [react()],
+	resolve: {
+		alias: {
+			'@': path.resolve(__dirname, './src'),
+			'@styles': path.resolve(__dirname, './src/styles'),
+			'@components': path.resolve(__dirname, './src/components'),
+			'@pages': path.resolve(__dirname, './src/pages'),
+			'@hooks': path.resolve(__dirname, './src/hooks'),
+			'@utils': path.resolve(__dirname, './src/utils'),
+			'@assets': path.resolve(__dirname, './src/assets'),
+			'@redux': path.resolve(__dirname, './src/redux'),
+		},
+	},
+	css: {
+		preprocessorOptions: {
+			scss: {
+				additionalData: `@use "@/styles/utils" as *;`,
+			},
+		},
+	},
+});
+
+
+================================================================================
+# END OF PROJECT CONTEXT

@@ -1,0 +1,20 @@
+.hero {
+	color: $color-secondary;
+	flex: 1;
+}
+
+.status {
+	text-transform: uppercase;
+	@include section-spacing(calc($spacing-3xl + $spacing-1xl));
+}
+
+.title {
+	margin-bottom: $spacing-lg;
+	font-size: $font-size-3xl;
+}
+
+.description {
+	font-size: $font-size-lg;
+	color: $color-secondary;
+	@include section-spacing($spacing-3xl);
+}

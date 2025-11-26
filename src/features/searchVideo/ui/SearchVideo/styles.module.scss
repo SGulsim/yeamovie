@@ -1,0 +1,22 @@
+.searchWrapper {
+	position: relative;
+	width: 100%;
+	max-width: 400px;
+}
+
+.searchInput {
+	width: 100%;
+	@include padding-xy($spacing-lg, $spacing-2sm);
+	padding-right: $spacing-2xl;
+	@include focus-border($color-accent);
+	@include transition(border-color);
+	border: 2px solid rgba(0, 0, 0, 0.1);
+	border-radius: $radius-lg;
+	font-size: $font-size-md;
+}
+
+.searchIcon {
+	@include absolute-vertical-center;
+	right: $spacing-lg;
+	cursor: pointer;
+}

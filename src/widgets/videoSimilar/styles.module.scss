@@ -1,0 +1,15 @@
+.similar {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-1xl;
+}
+
+.title {
+	display: inline-flex;
+	align-self: center;
+	padding: $spacing-2sm $spacing-xl;
+	color: $color-secondary;
+	background-color: $color-primary;
+	border-radius: $radius-lg;
+	text-transform: capitalize;
+}

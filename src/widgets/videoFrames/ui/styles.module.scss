@@ -1,0 +1,15 @@
+.frames {
+	display: flex;
+	flex-direction: column;
+	@include section-spacing(calc($spacing-3xl + $spacing-lg));
+}
+
+.title {
+	display: inline-flex;
+	align-self: center;
+	padding: $spacing-2sm calc($spacing-2xl + $spacing-md);
+	margin-bottom: $spacing-3xl;
+	color: $color-secondary;
+	background-color: $color-primary;
+	border-radius: $radius-lg;
+}

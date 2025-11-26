@@ -1,0 +1,19 @@
+.details {
+	width: 100%;
+	border-radius: $radius-sm;
+	overflow: hidden;
+	color: $color-primary;
+}
+
+.movieName {
+	margin-bottom: $spacing-2xl;
+	font-weight: bold;
+}
+
+.description {
+	margin-bottom: $spacing-2xl;
+}
+
+.btns {
+	display: flex;
+}

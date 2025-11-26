@@ -1,0 +1,19 @@
+.select {
+	appearance: none;
+	@include rounded($radius-lg);
+	@include padding-xy($spacing-md, $spacing-2sm);
+	@include focus-border(rgba($color-text, 0.5));
+	@include transition(border-color);
+	padding-right: $spacing-xl;
+	color: $color-text;
+	border-color: $color-text;
+	background-color: transparent;
+	background-image: url('@shared/assets/icons/arrowSelect.svg');
+	background-repeat: no-repeat;
+	background-position: right $spacing-sm center;
+	background-size: 16px;
+
+	&:hover {
+		cursor: pointer;
+	}
+}

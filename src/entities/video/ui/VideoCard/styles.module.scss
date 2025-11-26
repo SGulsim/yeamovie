@@ -1,0 +1,26 @@
+.item {
+	@include flex-column($gap: $spacing-sm);
+	@include hover-scale(1.02);
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+
+	a {
+		display: flex;
+		flex-direction: column;
+		gap: $spacing-sm;
+		text-decoration: none;
+		color: inherit;
+	}
+}
+
+.poster {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	gap: $spacing-sm;
+
+	img {
+		height: 500px;
+	}
+}

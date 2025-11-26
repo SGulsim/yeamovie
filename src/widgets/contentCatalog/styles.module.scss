@@ -1,0 +1,3 @@
+.content {
+	@include section-spacing(calc($spacing-3xl + $spacing-1xl));
+}

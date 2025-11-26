@@ -1,0 +1,5 @@
+.filters {
+	@include flex-align($gap: $spacing-lg);
+	margin-top: $spacing-2xl;
+	@include section-spacing($spacing-3xl);
+}

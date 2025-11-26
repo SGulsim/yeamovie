@@ -1,0 +1,10 @@
+.meta {
+	display: flex;
+	justify-content: space-between;
+}
+
+.info {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-xs;
+}

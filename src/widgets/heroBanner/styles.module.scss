@@ -1,0 +1,12 @@
+.banner {
+	@include flex-align($gap: $spacing-1xl);
+	padding: $spacing-xl;
+	border-radius: $radius-sm;
+	background: #0c0a2a;
+	@include section-spacing(calc($spacing-3xl + $spacing-1xl));
+
+	@include tablet {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}

@@ -1,0 +1,12 @@
+.tab {
+	background-color: $color-secondary;
+	border-radius: $radius-lg;
+	color: $color-primary;
+	padding: $spacing-2sm $spacing-xl;
+	font-size: $font-size-md;
+
+	&.active {
+		background-color: $color-primary;
+		color: $color-secondary;
+	}
+}

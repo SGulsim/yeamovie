@@ -1,0 +1,2918 @@
+# PROJECT CONTEXT
+# Generated: 2025-11-26T19:11:02.719Z
+
+================================================================================
+
+## PROJECT STRUCTURE
+
+  index.html
+  package.json
+  src/app/appEntry.tsx
+  src/app/appReducer.ts
+  src/app/appStore.ts
+  src/app/layout/BaseLayout.tsx
+  src/entities/video/api/api.ts
+  src/entities/video/index.ts
+  src/entities/video/model/slice.ts
+  src/entities/video/model/types.ts
+  src/entities/video/ui/VideoCard/VideoCard.tsx
+  src/entities/video/ui/VideoCard/styles.module.scss
+  src/entities/video/ui/VideoDetails/VideoDetails.tsx
+  src/entities/video/ui/VideoDetails/styles.module.scss
+  src/entities/video/ui/VideoFacts/VideoFacts.tsx
+  src/entities/video/ui/VideoFacts/styles.module.scss
+  src/entities/video/ui/VideoHero/VideoHero.tsx
+  src/entities/video/ui/VideoHero/styles.module.scss
+  src/entities/video/ui/VideoMeta/VideoMeta.tsx
+  src/entities/video/ui/VideoMeta/styles.module.scss
+  src/entities/video/ui/index.ts
+  src/features/breadcrumbs/index.ts
+  src/features/breadcrumbs/ui/Breadcrumbs/Breadcrumbs.tsx
+  src/features/breadcrumbs/ui/Breadcrumbs/styles.module.scss
+  src/features/filterVideos/index.ts
+  src/features/filterVideos/model/slice.ts
+  src/features/filterVideos/ui/FilterPanel/FilterPanel.tsx
+  src/features/filterVideos/ui/FilterPanel/styles.module.scss
+  src/features/searchVideo/index.ts
+  src/features/searchVideo/ui/SearchVideo/SearchVideo.tsx
+  src/features/searchVideo/ui/SearchVideo/styles.module.scss
+  src/features/sortControls/index.ts
+  src/features/sortControls/ui/SortControls/SortControls.tsx
+  src/features/sortControls/ui/SortControls/styles.module.scss
+  src/pages/home/index.ts
+  src/pages/home/ui/HomePage.tsx
+  src/pages/search/index.ts
+  src/pages/search/ui/SearchPage.tsx
+  src/pages/video/index.ts
+  src/pages/video/ui/VideoPage.tsx
+  src/pages/video/ui/styles.module.scss
+  src/shared/constants/info.js
+  src/shared/constants/movies.js
+  src/shared/hooks/useVideos.ts
+  src/shared/ui/Button/Button.tsx
+  src/shared/ui/Button/styles.module.scss
+  src/shared/ui/Image/Image.tsx
+  src/shared/ui/Image/styles.module.scss
+  src/shared/ui/Logo/Logo.tsx
+  src/shared/ui/Logo/styles.module.scss
+  src/shared/ui/Rating/Rating.tsx
+  src/shared/ui/Rating/styles.module.scss
+  src/shared/ui/Select/Select.tsx
+  src/shared/ui/Select/styles.module.scss
+  src/shared/ui/Separator/Separator.tsx
+  src/shared/ui/Tab/Tab.tsx
+  src/shared/ui/Tab/styles.module.scss
+  src/shared/ui/Tabs/Tabs.tsx
+  src/shared/ui/Tabs/styles.module.scss
+  src/shared/ui/Title/Title.tsx
+  src/shared/ui/Title/styles.module.scss
+  src/shared/ui/Year/Year.tsx
+  src/shared/ui/Year/styles.module.scss
+  src/styles/_global.scss
+  src/styles/_typography.scss
+  src/styles/index.scss
+  src/styles/utils/_index.scss
+  src/styles/utils/_mixins.scss
+  src/styles/utils/_reset.scss
+  src/styles/utils/_variables.scss
+  src/widgets/contentCatalog/ContentCatalog.tsx
+  src/widgets/contentCatalog/styles.module.scss
+  src/widgets/footer/Footer.tsx
+  src/widgets/footer/styles.module.scss
+  src/widgets/header/Header.tsx
+  src/widgets/header/styles.module.scss
+  src/widgets/heroBanner/HeroBanner.tsx
+  src/widgets/heroBanner/styles.module.scss
+  src/widgets/index.ts
+  src/widgets/navigation/Navigation.tsx
+  src/widgets/navigation/styles.module.scss
+  src/widgets/videoDescription/VideoDescription.tsx
+  src/widgets/videoDescription/styles.module.scss
+  src/widgets/videoFilters/VideoFilters.tsx
+  src/widgets/videoFilters/styles.module.scss
+  src/widgets/videoFrames/ui/FrameList/FrameList.tsx
+  src/widgets/videoFrames/ui/FrameList/styles.module.scss
+  src/widgets/videoFrames/ui/VideoFrames.tsx
+  src/widgets/videoFrames/ui/styles.module.scss
+  src/widgets/videoList/VideoList.tsx
+  src/widgets/videoList/styles.module.scss
+  src/widgets/videoSimilar/VideoSimilar.tsx
+  src/widgets/videoSimilar/styles.module.scss
+  tsconfig.json
+  tsconfig.node.json
+  vite.config.ts
+
+================================================================================
+
+## FILES CONTENT
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: index.html
+────────────────────────────────────────────────────────────────────────────────
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>yeamovie</title>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script type="module" src="/src/app/appEntry.tsx"></script>
+	</body>
+</html>
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: package.json
+────────────────────────────────────────────────────────────────────────────────
+
+{
+	"name": "yeamovie",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"lint": "eslint .",
+		"preview": "vite preview",
+		"collect": "node collect-project.mjs"
+	},
+	"dependencies": {
+		"@reduxjs/toolkit": "^2.10.1",
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0",
+		"react-redux": "^9.2.0",
+		"react-router-dom": "^7.9.6"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.39.1",
+		"@types/node": "^24.10.1",
+		"@types/react": "^19.2.2",
+		"@types/react-dom": "^19.2.2",
+		"@vitejs/plugin-react": "^5.1.0",
+		"eslint": "^9.39.1",
+		"eslint-plugin-react-hooks": "^7.0.1",
+		"eslint-plugin-react-refresh": "^0.4.24",
+		"globals": "^16.5.0",
+		"sass-embedded": "^1.93.3",
+		"scss-reset": "^1.4.6",
+		"typescript": "~5.9.3",
+		"typescript-eslint": "^8.46.3",
+		"vite": "^7.2.2"
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/app/appEntry.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import '@styles/index.scss';
+import { MainPage } from '@/pages/home';
+import { VideoPage } from '@/pages/video';
+import { SearchPage } from '@/pages/search';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import BaseLayout from './layout/BaseLayout';
+import { Provider } from 'react-redux';
+import { store } from './appStore';
+
+createRoot(document.getElementById('root')!).render(
+	<StrictMode>
+		<Provider store={store}>
+			<BrowserRouter>
+				<Routes>
+					<Route path='/' element={<BaseLayout />}>
+						<Route index element={<MainPage />} />
+						<Route path='movie/:id' element={<VideoPage />} />
+						<Route path='search' element={<SearchPage />} />
+					</Route>
+				</Routes>
+			</BrowserRouter>
+		</Provider>
+	</StrictMode>
+);
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/app/appReducer.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import { videosReducer } from '@/entities/video/index';
+import { videosApi } from '@/entities/video/api/api';
+import { combineReducers } from '@reduxjs/toolkit';
+
+export const rootReducer = combineReducers({
+	videos: videosReducer,
+	[videosApi.reducerPath]: videosApi.reducer,
+});
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/app/appStore.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import { configureStore } from '@reduxjs/toolkit';
+import { rootReducer } from './appReducer';
+import { videosApi } from '@/entities/video/api/api';
+import {
+	useDispatch,
+	useSelector,
+	type TypedUseSelectorHook,
+} from 'react-redux';
+
+export const store = configureStore({
+	reducer: rootReducer,
+	middleware: getDefaultMiddleware =>
+		getDefaultMiddleware().concat(videosApi.middleware),
+});
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/app/layout/BaseLayout.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import { Header, Footer } from '@/widgets';
+import '@styles/_global.scss';
+import { Outlet } from 'react-router-dom';
+
+const BaseLayout = () => {
+	return (
+		<>
+			<Header />
+
+			<div className='container'>
+				<Outlet />
+			</div>
+
+			<Footer />
+		</>
+	);
+};
+
+export default BaseLayout;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/api/api.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import type {
+	Staff,
+	Video,
+	VideosApiResponse,
+	SimilarFilmsResponse,
+} from '../model/types';
+
+const BASE_URL = import.meta.env.VITE_VIDEOS_BASE_URL;
+const STAFF_URL = import.meta.env.VITE_VIDEOS_STAFF_URL;
+const API_KEY = import.meta.env.VITE_VIDEOS_API_KEY;
+
+export const videosApi = createApi({
+	reducerPath: 'videosApi',
+	baseQuery: fetchBaseQuery({
+		baseUrl: BASE_URL,
+		prepareHeaders: headers => {
+			headers.set('X-API-KEY', API_KEY);
+			headers.set('Content-Type', 'application/json');
+			return headers;
+		},
+	}),
+	endpoints: builder => ({
+		getMovies: builder.query<VideosApiResponse, null>({
+			keepUnusedDataFor: 0,
+			query: category => ({
+				url: `films/collections`,
+				params: {
+					type: category,
+					page: 1,
+				},
+			}),
+		}),
+		getMovieById: builder.query<Video, string>({
+			keepUnusedDataFor: 0,
+			query: id => `films/${id}`,
+		}),
+		getStaffById: builder.query<Staff[], string>({
+			keepUnusedDataFor: 0,
+			query: id => ({
+				url: `${STAFF_URL}/staff`,
+				params: { filmId: id },
+			}),
+		}),
+		getSimilarMovies: builder.query<SimilarFilmsResponse, string>({
+			keepUnusedDataFor: 0,
+			query: id => ({
+				url: `films/${id}/similars`,
+				params: { filmId: id },
+			}),
+		}),
+	}),
+});
+
+export const {
+	useGetMoviesQuery,
+	useGetMovieByIdQuery,
+	useGetStaffByIdQuery,
+	useGetSimilarMoviesQuery,
+} = videosApi;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/index.ts
+────────────────────────────────────────────────────────────────────────────────
+
+export { videosApi, useGetMoviesQuery } from './api/api';
+
+export { default as videosReducer } from './model/slice';
+export { videosSlice } from './model/slice';
+export type { Video, VideosApiResponse } from './model/types';
+
+export { default as VideoCard } from './ui/VideoCard/VideoCard';
+export { default as VideoHero } from './ui/VideoHero/VideoHero';
+export { default as VideoMeta } from './ui/VideoMeta/VideoMeta';
+export { default as VideoFacts } from './ui/VideoFacts/VideoFacts';
+export { default as VideoDetails } from './ui/VideoDetails/VideoDetails';
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/model/slice.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { Video } from './types';
+
+interface State {
+	videos: Video[];
+}
+
+const initialState: State = {
+	videos: [],
+};
+
+export const videosSlice = createSlice({
+	name: 'videos',
+	initialState,
+	reducers: {
+		setVideos: (state, action: PayloadAction<Video[]>) => {
+			state.videos = action.payload;
+		},
+	},
+});
+
+export default videosSlice.reducer;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/model/types.ts
+────────────────────────────────────────────────────────────────────────────────
+
+export interface Genres {
+	genre: string;
+}
+
+export interface SimilarFilm {
+	filmId: number;
+	nameRu: string;
+	nameEn: string;
+	nameOriginal: string;
+	posterUrl: string;
+	posterUrlPreview: string;
+	relationType: string;
+}
+
+export interface SimilarFilmsResponse {
+	total: number;
+	items: SimilarFilm[];
+}
+
+export interface Video {
+	kinopoiskId: number;
+	imdbId: string;
+	nameRu: string;
+	nameEn: string;
+	nameOriginal: string;
+	posterUrl: string;
+	posterUrlPreview: string;
+	coverUrl: string;
+	logoUrl: string;
+	ratingKinopoisk: number;
+	ratingImdb: number;
+	description: string;
+	shortDescription: string;
+	countries: string[];
+	genres: Genres[];
+	year: number;
+	type: string;
+}
+
+export interface VideosApiResponse {
+	total: number;
+	totalPages: number;
+	items: Video[];
+}
+
+export interface Staff {
+	staffId: number;
+	nameRu: string;
+	nameEn: string;
+	description: string;
+	posterUrl: string;
+	professionText: string;
+	professionKey: string;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/ui/VideoCard/VideoCard.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import { Link } from 'react-router-dom';
+import Image from '@/shared/ui/Image/Image';
+import VideoMeta from '../VideoMeta/VideoMeta';
+import type { Video } from '../../model/types';
+
+interface VideoCardProps {
+	video: Video;
+}
+
+const VideoCard = ({ video }: VideoCardProps) => {
+	return (
+		<div className={styles.item}>
+			<Link to={`/movie/${video.kinopoiskId}`}>
+				<div className={styles.poster}>
+					<Image src={video.posterUrlPreview} alt={video.nameRu} />
+					<VideoMeta video={video} />
+				</div>
+			</Link>
+		</div>
+	);
+};
+
+export default VideoCard;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/ui/VideoCard/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.item {
+	@include flex-column($gap: $spacing-sm);
+	@include hover-scale(1.02);
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+
+	a {
+		display: flex;
+		flex-direction: column;
+		gap: $spacing-sm;
+		text-decoration: none;
+		color: inherit;
+	}
+}
+
+.poster {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	gap: 10px;
+
+	img {
+		height: 500px;
+	}
+}
+
+.posterImage {
+	height: 450px;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/ui/VideoDetails/VideoDetails.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import Button from '@/shared/ui/Button/Button';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const VideoDetails = ({ title, description }: Props) => {
+	return (
+		<div className={styles.details}>
+			<h1 className={styles.movieName}>{title}</h1>
+			<p className={styles.description}>{description}</p>
+			<div className={styles.btns}>
+				<Button onClick={() => 'click'} ariaLabel='Добавить в избранное'>
+					Избранное
+				</Button>
+			</div>
+		</div>
+	);
+};
+
+export default VideoDetails;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/ui/VideoDetails/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.details {
+	width: 100%;
+	border-radius: $radius-sm;
+	overflow: hidden;
+	color: $color-primary;
+}
+
+.posterImage {
+	width: 100%;
+	height: 100%;
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+.movieName {
+	margin-bottom: 30px;
+	font-weight: bold;
+}
+
+.description {
+	margin-bottom: 30px;
+}
+
+.btns {
+	display: flex;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/ui/VideoFacts/VideoFacts.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import type { Staff, Video } from '../../model/types';
+
+interface Props {
+	video: Video;
+	staff: Staff[];
+}
+
+const VideoFacts = ({ video, staff }: Props) => {
+	return (
+		<div className={styles.facts}>
+			<h3 className={styles.title}>О фильме</h3>
+			<ul className={styles.list}>
+				<li className={styles.item}>
+					<p>Жанр</p>
+					<p>
+						{video?.genres.map(({ genre }) => (
+							<>
+								<span key={video.kinopoiskId}>{genre}</span>&nbsp;
+							</>
+						))}
+					</p>
+				</li>
+				<li className={styles.item}>
+					<p>Страна</p>
+					<p>
+						{video?.countries.map(({ country }) => (
+							<>
+								<span key={video.kinopoiskId}>{country}</span>
+							</>
+						))}
+					</p>
+				</li>
+				<li className={styles.item}>
+					<p>Год</p>
+					<p>{video?.year}</p>
+				</li>
+				<li className={styles.item}>
+					<p>Режиссер</p>
+					<p>
+						{staff?.find(item => item.professionText === 'PRODUCER')?.nameRu}
+					</p>
+				</li>
+				<li className={styles.item}>
+					<p>В главных ролях</p>
+					<p>{staff?.find(item => item.professionText === 'ACTOR')?.nameRu}</p>
+				</li>
+			</ul>
+		</div>
+	);
+};
+
+export default VideoFacts;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/ui/VideoFacts/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.facts {
+	color: $color-primary;
+	max-width: 300px;
+}
+
+.title {
+	margin-bottom: 20px;
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	color: $color-text;
+}
+
+.item {
+	display: flex;
+	justify-content: space-between;
+}
+
+.genre {
+	display: flex;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/ui/VideoHero/VideoHero.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import Button from '@/shared/ui/Button/Button';
+import { useNavigate } from 'react-router';
+
+interface Props {
+	id: number;
+	title?: string;
+	description?: string;
+}
+
+const VideoHero = ({ id, title, description }: Props) => {
+	const navigate = useNavigate();
+
+	return (
+		<article className={styles.hero}>
+			<h3 className={styles.status}>уже в кино</h3>
+			<h2 className={styles.title}>{title}</h2>
+			<p className={styles.description}>{description}</p>
+			<Button
+				onClick={() => navigate(`/movie/${id}`)}
+				ariaLabel='Смотреть фильм'
+			>
+				Смотреть
+			</Button>
+		</article>
+	);
+};
+
+export default VideoHero;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/ui/VideoHero/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.hero {
+	color: $color-secondary;
+	flex: 1;
+}
+
+.status {
+	text-transform: uppercase;
+	margin-bottom: calc($spacing-3xl + 40px);
+}
+
+.title {
+	margin-bottom: $spacing-lg;
+	font-size: $font-size-3xl;
+}
+
+.description {
+	font-size: $font-size-lg;
+	color: $color-secondary;
+	@include section-spacing($spacing-3xl);
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/ui/VideoMeta/VideoMeta.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import Year from '@/shared/ui/Year/Year';
+import Rating from '@/shared/ui/Rating/Rating';
+import Title from '@/shared/ui/Title/Title';
+import type { Video } from '../../model/types';
+
+interface Props {
+	video: Video;
+}
+
+const VideoMeta = ({ video }: Props) => {
+	return (
+		<div className={styles.meta}>
+			<div className={styles.info}>
+				<Title title={video.nameRu} />
+				<Year year={video.year} />
+			</div>
+			<Rating ratingKinopoisk={video.ratingKinopoisk} />
+		</div>
+	);
+};
+
+export default VideoMeta;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/ui/VideoMeta/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.meta {
+	display: flex;
+	justify-content: space-between;
+}
+
+.info {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/ui/index.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import VideoCard from './VideoCard/VideoCard';
+import VideoDetails from './VideoDetails/VideoDetails';
+import VideoFacts from './VideoFacts/VideoFacts';
+import VideoHero from './VideoHero/VideoHero';
+import VideoMeta from './VideoMeta/VideoMeta';
+
+export default {
+	VideoCard,
+	VideoDetails,
+	VideoFacts,
+	VideoHero,
+	VideoMeta,
+};
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/features/breadcrumbs/index.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import Breadcrumbs from './ui/Breadcrumbs/Breadcrumbs';
+
+export { Breadcrumbs };
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/features/breadcrumbs/ui/Breadcrumbs/Breadcrumbs.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import { Link } from 'react-router-dom';
+import Separator from '@/shared/ui/Separator/Separator';
+
+const Breadcrumbs = props => {
+	return <div className={styles.breadcrumbs}>{props.children}</div>;
+};
+
+const Item = ({ children, to, direction = 'next' }) => {
+	return (
+		<Link to={to}>
+			<div
+				className={`${styles.breadcrumbsItem} ${
+					direction === 'next' ? styles.next : styles.back
+				}`}
+			>
+				{direction === 'back' && <Separator direction='left' />}
+				{children}
+				{direction === 'next' && <Separator direction='right' />}
+			</div>
+		</Link>
+	);
+};
+
+Breadcrumbs.Item = Item;
+
+export default Breadcrumbs;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/features/breadcrumbs/ui/Breadcrumbs/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.breadcrumbs {
+	display: flex;
+}
+
+.breadcrumbsItem {
+	@include flex-align($gap: $spacing-md);
+	@include transition(color);
+	margin-bottom: $spacing-lg;
+
+	&:hover {
+		color: $color-accent;
+	}
+
+	&.next {
+		margin-left: auto;
+	}
+
+	&.back {
+		margin-right: auto;
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/features/filterVideos/index.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import FilterPanel from './ui/FilterPanel/FilterPanel';
+
+export { FilterPanel };
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/features/filterVideos/model/slice.ts
+────────────────────────────────────────────────────────────────────────────────
+
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/features/filterVideos/ui/FilterPanel/FilterPanel.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import {
+	genres,
+	countries,
+	years,
+	ages,
+	productions,
+} from '@shared/constants/info';
+import Select from '@/shared/ui/Select/Select';
+import SortControls from '@/features/sortControls/ui/SortControls/SortControls';
+
+const FilterPanel = () => {
+	return (
+		<div className={styles.filters}>
+			<Select options={genres} />
+			<Select options={countries} />
+			<Select options={years} />
+			<Select options={ages} />
+			<Select options={productions} />
+			<SortControls />
+		</div>
+	);
+};
+
+export default FilterPanel;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/features/filterVideos/ui/FilterPanel/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.filters {
+	@include flex-align($gap: $spacing-lg);
+	margin-top: $spacing-2xl;
+	@include section-spacing($spacing-3xl);
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/features/searchVideo/index.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import SearchVideo from './ui/SearchVideo/SearchVideo';
+
+export { SearchVideo };
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/features/searchVideo/ui/SearchVideo/SearchVideo.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import searchIconUrl from '@shared/assets/icons/search.svg';
+
+const SearchVideo = () => {
+	return (
+		<div className={styles.searchWrapper}>
+			<input
+				type='text'
+				placeholder='Поиск фильмов...'
+				className={styles.searchInput}
+			/>
+			<img
+				className={styles.searchIcon}
+				src={searchIconUrl}
+				alt='поиск фильмов'
+			/>
+		</div>
+	);
+};
+
+export default SearchVideo;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/features/searchVideo/ui/SearchVideo/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.searchWrapper {
+	position: relative;
+	width: 100%;
+	max-width: 400px;
+}
+
+.searchInput {
+	width: 100%;
+	@include padding-xy($spacing-lg, $spacing-2sm);
+	padding-right: $spacing-2xl;
+	@include focus-border($color-accent);
+	@include transition(border-color);
+	border: 2px solid rgba(0, 0, 0, 0.1);
+	border-radius: $radius-lg;
+	font-size: $font-size-md;
+}
+
+.searchIcon {
+	@include absolute-vertical-center;
+	right: $spacing-lg;
+	cursor: pointer;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/features/sortControls/index.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import SortControls from './ui/SortControls/SortControls';
+
+export { SortControls };
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/features/sortControls/ui/SortControls/SortControls.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import Button from '@/shared/ui/Button/Button';
+import Separator from '@/shared/ui/Separator/Separator';
+
+const SortControls = () => {
+	return (
+		<Button variant='icon' ariaLabel='Сортировка'>
+			<Separator direction='down' />
+			<Separator direction='up' />
+		</Button>
+	);
+};
+
+export default SortControls;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/features/sortControls/ui/SortControls/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/pages/home/index.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import MainPage from './ui/HomePage';
+
+export { MainPage };
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/pages/home/ui/HomePage.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import { HeroBanner, ContentCatalog, VideoFilters } from '@/widgets';
+
+const HomePage = () => {
+	return (
+		<main>
+			<HeroBanner />
+			<ContentCatalog />
+			<VideoFilters />
+		</main>
+	);
+};
+
+export default HomePage;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/pages/search/index.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import SearchPage from './ui/SearchPage';
+
+export { SearchPage };
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/pages/search/ui/SearchPage.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+const SearchPage = () => {
+	return <main>search</main>;
+};
+
+export default SearchPage;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/pages/video/index.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import VideoPage from './ui/VideoPage';
+
+export { VideoPage };
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/pages/video/ui/VideoPage.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import VideoDescription from '@/widgets/videoDescription/VideoDescription';
+import { Breadcrumbs } from '@/features/breadcrumbs';
+import VideoFrames from '@/widgets/videoFrames/ui/VideoFrames';
+import VideoSimilar from '@/widgets/videoSimilar/VideoSimilar';
+
+const VideoPage = () => {
+	return (
+		<main>
+			<Breadcrumbs>
+				<Breadcrumbs.Item to={'/'} direction='back'>
+					Главная
+				</Breadcrumbs.Item>
+			</Breadcrumbs>
+			<VideoDescription />
+			<VideoFrames />
+			<VideoSimilar />
+		</main>
+	);
+};
+
+export default VideoPage;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/pages/video/ui/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.info {
+	display: flex;
+	gap: 35px;
+	margin-bottom: 80px;
+}
+
+.description {
+	display: flex;
+	flex-direction: column;
+	gap: 50px;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/constants/info.js
+────────────────────────────────────────────────────────────────────────────────
+
+const genres = [
+	{ value: 'horror', label: 'Ужасы' },
+	{ value: 'action', label: 'Боевик' },
+	{ value: 'comedy', label: 'Комедия' },
+	{ value: 'drama', label: 'Драма' },
+	{ value: 'thriller', label: 'Триллер' },
+	{ value: 'fantasy', label: 'Фантастика' },
+	{ value: 'detective', label: 'Детектив' },
+	{ value: 'romance', label: 'Романтика' },
+	{ value: 'adventure', label: 'Приключения' },
+	{ value: 'animation', label: 'Мультфильм' },
+];
+
+const countries = [
+	{ value: 'russia', label: 'Россия' },
+	{ value: 'usa', label: 'США' },
+	{ value: 'uk', label: 'Великобритания' },
+	{ value: 'france', label: 'Франция' },
+	{ value: 'germany', label: 'Германия' },
+	{ value: 'italy', label: 'Италия' },
+	{ value: 'spain', label: 'Испания' },
+	{ value: 'japan', label: 'Япония' },
+	{ value: 'korea', label: 'Южная Корея' },
+	{ value: 'china', label: 'Китай' },
+];
+
+const years = [
+	{ value: '2024', label: '2024' },
+	{ value: '2023', label: '2023' },
+	{ value: '2022', label: '2022' },
+	{ value: '2021', label: '2021' },
+	{ value: '2020', label: '2020' },
+	{ value: '2019', label: '2019' },
+	{ value: '2018', label: '2018' },
+	{ value: '2017', label: '2017' },
+	{ value: '2016', label: '2016' },
+	{ value: '2015', label: '2015' },
+];
+
+const ages = [
+	{ value: '0', label: '0+' },
+	{ value: '6', label: '6+' },
+	{ value: '12', label: '12+' },
+	{ value: '16', label: '16+' },
+	{ value: '18', label: '18+' },
+];
+
+const productions = [
+	{ value: 'russia', label: 'Россия' },
+	{ value: 'usa', label: 'США' },
+	{ value: 'europe', label: 'Европа' },
+	{ value: 'asia', label: 'Азия' },
+];
+
+export { genres, productions, ages, years, countries };
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/constants/movies.js
+────────────────────────────────────────────────────────────────────────────────
+
+const movies = [
+	{
+		title: 'Интерстеллар',
+		year: 2014,
+		rating: 8.6,
+	},
+	{
+		title: 'Начало',
+		year: 2010,
+		rating: 8.8,
+	},
+	{
+		title: 'Темный рыцарь',
+		year: 2008,
+		rating: 9.0,
+	},
+	{
+		title: 'Бойцовский клуб',
+		year: 1999,
+		rating: 8.8,
+	},
+	{
+		title: 'Матрица',
+		year: 1999,
+		rating: 8.7,
+	},
+	{
+		title: 'Побег из Шоушенка',
+		year: 1994,
+		rating: 9.3,
+	},
+	{
+		title: 'Форрест Гамп',
+		year: 1994,
+		rating: 8.8,
+	},
+	{
+		title: 'Криминальное чтиво',
+		year: 1994,
+		rating: 8.9,
+	},
+];
+export default movies;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/hooks/useVideos.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import { useGetMoviesQuery } from '@/entities/video';
+
+export const useVideos = (limit: number, category?: string) => {
+	const { data, isLoading, isError } = useGetMoviesQuery(category);
+
+	if (!data) {
+		return {
+			items: [],
+			isLoading,
+			isError,
+		};
+	}
+
+	if (limit) {
+		const limitedItems = data?.items.slice(0, limit);
+		return {
+			items: limitedItems || [],
+			total: data?.total || 0,
+			totalPages: data?.totalPages || 0,
+			isLoading,
+			isError,
+		};
+	} else {
+		return {
+			items: data?.items || [],
+			total: data?.total || 0,
+			totalPages: data?.totalPages || 0,
+			isLoading,
+			isError,
+		};
+	}
+};
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Button/Button.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import type { ReactNode } from 'react';
+import styles from './styles.module.scss';
+
+interface Props {
+	children?: ReactNode;
+	variant?: string;
+	size?: string;
+	type?: 'button' | 'submit' | 'reset';
+	disabled?: boolean;
+	active?: boolean;
+	onClick: () => void;
+	className?: string;
+	ariaLabel?: string;
+}
+
+const Button = ({
+	children,
+	variant = 'primary',
+	size = 'md',
+	type = 'button',
+	disabled = false,
+	active,
+	onClick,
+	className = '',
+	ariaLabel,
+}: Props) => {
+	const buttonClasses = [
+		styles.button,
+		styles[variant],
+		styles[size],
+		active && styles.active,
+		disabled && styles.disabled,
+		className,
+	]
+		.filter(Boolean)
+		.join(' ');
+	return (
+		<button
+			type={type}
+			className={buttonClasses}
+			onClick={onClick}
+			disabled={disabled}
+			aria-label={ariaLabel}
+			aria-pressed={active}
+		>
+			{children}
+		</button>
+	);
+};
+
+export default Button;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Button/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.button {
+	@include flex-center($gap: $spacing-sm);
+	@include focus-outline($color-accent);
+	@include transition(all);
+	font-size: $font-size-md;
+	font-weight: 500;
+	border: none;
+	border-radius: $radius-lg;
+	cursor: pointer;
+
+	&.disabled {
+		@include disabled;
+	}
+
+	&.fullWidth {
+		width: 100%;
+	}
+}
+
+.primary {
+	color: $color-secondary;
+	background-color: $color-accent;
+
+	&:hover:not(.disabled) {
+		background-color: $color-hovered-accent;
+	}
+}
+
+.secondary {
+	color: $color-primary;
+	background-color: $color-secondary;
+	border: 1px solid $color-text;
+
+	&:hover:not(.disabled):not(.active) {
+		@include hover-background($color-primary, 0.1);
+	}
+
+	&.active {
+		background-color: $color-primary;
+		color: $color-secondary;
+	}
+}
+
+.outline {
+	color: $color-accent;
+	background-color: transparent;
+	border: 1px solid $color-accent;
+
+	&:hover:not(.disabled) {
+		@include hover-background($color-accent, 0.1);
+	}
+}
+
+.icon {
+	padding: $spacing-sm;
+	background-color: transparent;
+
+	&:hover:not(.disabled) {
+		@include hover-background($color-text, 0.1);
+	}
+}
+
+.sm {
+	@include padding-xy($spacing-md, $spacing-xs);
+	font-size: $font-size-sm;
+}
+
+.md {
+	@include padding-xy($spacing-2xl, $spacing-2sm);
+	font-size: $font-size-md;
+}
+
+.lg {
+	@include padding-xy($spacing-3xl, $spacing-md);
+	font-size: $font-size-lg;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Image/Image.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+
+interface Props {
+	src?: string;
+	alt?: string;
+	type?: string;
+}
+
+const Image = ({ src, alt, type = 'poster' }: Props) => {
+	return (
+		<img
+			src={src}
+			alt={alt}
+			className={`${styles.poster} ${
+				(type === 'banner' && styles.banner) ||
+				(type === 'frame' && styles.frame)
+			}`}
+		/>
+	);
+};
+
+export default Image;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Image/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.poster {
+	object-fit: cover;
+	border-radius: $radius-sm;
+}
+.banner {
+	object-fit: cover;
+	border-radius: $radius-sm;
+	width: 765px;
+	height: 500px;
+}
+
+.frame {
+	width: 430px;
+	height: 420px;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Logo/Logo.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import { Link } from 'react-router-dom';
+import styles from './styles.module.scss';
+
+const Logo = () => {
+	return (
+		<Link to={'/'}>
+			<h2 className={styles.logo}>kinomonster</h2>
+		</Link>
+	);
+};
+
+export default Logo;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Logo/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.logo {
+	font-family: 'Bayon';
+	letter-spacing: 5px;
+	color: $color-accent;
+	text-transform: uppercase;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Rating/Rating.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+
+interface Props {
+	ratingKinopoisk: number;
+}
+
+const Rating = ({ ratingKinopoisk }: Props) => {
+	return (
+		<span className={styles.rating} aria-label='Рейтинг'>
+			⭐{ratingKinopoisk}/10
+		</span>
+	);
+};
+
+export default Rating;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Rating/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.rating {
+	font-size: $font-size-sm;
+	align-self: flex-end;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Select/Select.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+
+const Select = ({ options }) => {
+	return (
+		<select className={styles.select}>
+			{options?.map(option => (
+				<option
+					className={styles.option}
+					key={option.value}
+					value={option.value}
+				>
+					{option.label}
+				</option>
+			))}
+		</select>
+	);
+};
+
+export default Select;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Select/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.select {
+	appearance: none;
+	@include rounded($radius-lg);
+	@include padding-xy($spacing-md, $spacing-2sm);
+	@include focus-border(rgba($color-text, 0.5));
+	@include transition(border-color);
+	padding-right: $spacing-xl;
+	color: $color-text;
+	border-color: $color-text;
+	background-color: transparent;
+	background-image: url('@shared/assets/icons/arrowSelect.svg');
+	background-repeat: no-repeat;
+	background-position: right $spacing-sm center;
+	background-size: 16px;
+
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Separator/Separator.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import arrowLeft from '@shared/assets/icons/arrowLeft.svg';
+import arrowRight from '@shared/assets/icons/arrowRight.svg';
+import arrowDown from '@shared/assets/icons/arrowDown.svg';
+import arrowUp from '@shared/assets/icons/arrowUp.svg';
+import arrowSelect from '@shared/assets/icons/arrowSelect.svg';
+
+const Separator = ({ direction = 'left' }) => {
+	const icons = {
+		left: arrowLeft,
+		right: arrowRight,
+		up: arrowUp,
+		down: arrowDown,
+		select: arrowSelect,
+	};
+	return <img src={icons[direction]} alt={direction} />;
+};
+
+export default Separator;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Tab/Tab.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import type { ReactNode } from 'react';
+
+interface TabProps {
+	children: ReactNode;
+	label: string;
+}
+
+const Tab = ({ children }: TabProps) => {
+	return <>{children}</>;
+};
+
+export default Tab;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Tab/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.tab {
+	background-color: $color-secondary;
+	border-radius: $radius-lg;
+	color: $color-primary;
+	padding: $spacing-2sm $spacing-xl;
+	font-size: $font-size-md;
+
+	&.active {
+		background-color: $color-primary;
+		color: $color-secondary;
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Tabs/Tabs.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import { useState, type ReactNode } from 'react';
+import Button from '../Button/Button';
+
+interface Props {
+	children: ReactNode;
+	defaultActiveIndex: number;
+}
+
+const Tabs = ({ children, defaultActiveIndex = 0 }: Props) => {
+	const [activeIndex, setActiveIndex] = useState(defaultActiveIndex);
+	const tabs = Array.isArray(children) ? children : [children];
+
+	return (
+		<div className={styles.container}>
+			<div className={styles.tabs}>
+				{tabs.map((tab, index) => (
+					<Button
+						key={index}
+						onClick={() => setActiveIndex(index)}
+						variant='secondary'
+						active={activeIndex === index}
+					>
+						{tab.props.label}
+					</Button>
+				))}
+			</div>
+
+			<div className={styles.content}>{tabs[activeIndex]}</div>
+		</div>
+	);
+};
+
+export default Tabs;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Tabs/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.container {
+	@include flex-column($gap: $spacing-xl);
+}
+
+.tabs {
+	display: flex;
+	gap: $spacing-lg;
+	margin-bottom: $spacing-xl;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Title/Title.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+
+interface Props {
+	title: string;
+}
+
+const Title = ({ title }: Props) => {
+	return (
+		<div>
+			<h2 className={styles.title}>{title}</h2>
+		</div>
+	);
+};
+
+export default Title;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Title/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.title {
+	@include text-clamp(2);
+	white-space: normal;
+	@include transition(color);
+	font-size: $font-size-lg;
+	font-weight: 600;
+	color: $color-primary;
+
+	&:hover {
+		color: $color-accent;
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Year/Year.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+
+const Year = ({ year }) => {
+	return (
+		<div>
+			<p className={styles.year}>{year}</p>
+		</div>
+	);
+};
+
+export default Year;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/ui/Year/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.year {
+	flex: 1;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/styles/_global.scss
+────────────────────────────────────────────────────────────────────────────────
+
+@use 'utils' as *;
+
+.container {
+	margin: 0 auto;
+	padding: $spacing-3xl;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/styles/_typography.scss
+────────────────────────────────────────────────────────────────────────────────
+
+@use 'utils/variables' as *;
+
+@font-face {
+	font-family: 'MyFont';
+	src: url('@shared/assets/fonts/MyFont.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Bayon';
+	src: url('@shared/assets/fonts/Bayon.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0;
+	font-weight: 600;
+	line-height: 1.2;
+}
+
+h1 {
+	font-size: $font-size-3xl;
+}
+
+h2 {
+	font-size: $font-size-2xl;
+}
+
+h3 {
+	font-size: $font-size-xl;
+}
+
+p {
+	margin: 0;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/styles/index.scss
+────────────────────────────────────────────────────────────────────────────────
+
+@use 'utils' as *;
+
+@use 'utils/reset' as custom;
+
+@use 'typography';
+@use 'global';
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/styles/utils/_index.scss
+────────────────────────────────────────────────────────────────────────────────
+
+@forward 'variables';
+@forward 'mixins';
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/styles/utils/_mixins.scss
+────────────────────────────────────────────────────────────────────────────────
+
+@use 'variables' as *;
+
+@mixin flex-header {
+	display: flex;
+	gap: 124px;
+	align-items: center;
+}
+
+@mixin flex-around {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+@mixin flex-center($gap: 0) {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	@if $gap != 0 {
+		gap: $gap;
+	}
+}
+
+@mixin flex-align($gap: 0, $justify: flex-start) {
+	display: flex;
+	align-items: center;
+	justify-content: $justify;
+	@if $gap != 0 {
+		gap: $gap;
+	}
+}
+
+@mixin flex-between($gap: 0) {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	@if $gap != 0 {
+		gap: $gap;
+	}
+}
+
+@mixin flex-around($gap: 0) {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	@if $gap != 0 {
+		gap: $gap;
+	}
+}
+
+@mixin flex-column($gap: 0, $align: stretch) {
+	display: flex;
+	flex-direction: column;
+	align-items: $align;
+	@if $gap != 0 {
+		gap: $gap;
+	}
+}
+
+@mixin grid-auto($min-width: 250px, $gap: $spacing-lg) {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+	gap: $gap;
+}
+
+@mixin grid-columns($columns: 4, $gap: $spacing-lg) {
+	display: grid;
+	grid-template-columns: repeat($columns, 1fr);
+	gap: $gap;
+}
+
+@mixin grid-responsive($desktop: 4, $tablet: 2, $mobile: 1, $gap: $spacing-lg) {
+	display: grid;
+	grid-template-columns: repeat($desktop, 1fr);
+	gap: $gap;
+
+	@media (max-width: $breakpoint-tablet) {
+		grid-template-columns: repeat($tablet, 1fr);
+	}
+
+	@media (max-width: $breakpoint-mobile) {
+		grid-template-columns: repeat($mobile, 1fr);
+	}
+}
+
+@mixin text-ellipsis {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+@mixin text-clamp($lines: 2) {
+	display: -webkit-box;
+	-webkit-line-clamp: $lines;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+@mixin heading($size, $weight: 600, $spacing: 0) {
+	font-size: $size;
+	font-weight: $weight;
+	line-height: 1.2;
+	margin: 0;
+	@if $spacing != 0 {
+		letter-spacing: $spacing;
+	}
+}
+
+@mixin transition(
+	$properties: all,
+	$duration: 0.2s,
+	$timing: ease,
+	$delay: 0s
+) {
+	transition: $properties $duration $timing $delay;
+}
+
+@mixin transitions($transitions...) {
+	transition: $transitions;
+}
+
+@mixin hover-opacity($opacity: 0.8) {
+	cursor: pointer;
+	transition: opacity 0.2s ease;
+
+	&:hover {
+		opacity: $opacity;
+	}
+}
+
+@mixin hover-background($color, $opacity: 0.1) {
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+	&:hover {
+		color: $color;
+		background-color: rgba($color, $opacity);
+	}
+}
+
+@mixin hover-scale($scale: 1.05) {
+	cursor: pointer;
+	transition: transform 0.2s ease;
+
+	&:hover {
+		transform: scale($scale);
+	}
+}
+
+@mixin rounded($radius: $radius-sm) {
+	border-radius: $radius;
+	overflow: hidden;
+}
+
+@mixin circle($size) {
+	width: $size;
+	height: $size;
+	border-radius: 50%;
+}
+
+@mixin square($size) {
+	width: $size;
+	height: $size;
+}
+
+@mixin absolute-center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@mixin absolute-vertical-center {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+@mixin cover-parent {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+@mixin focus-outline($color: $color-accent, $offset: 2px, $width: 2px) {
+	&:focus-visible {
+		outline: $width solid $color;
+		outline-offset: $offset;
+	}
+}
+
+@mixin focus-border($color: $color-accent) {
+	&:focus {
+		border-color: $color;
+		outline: none;
+	}
+}
+
+@mixin disabled {
+	&:disabled,
+	&.disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		pointer-events: none;
+	}
+}
+
+@mixin active-state($bg-color, $text-color: null) {
+	&.active {
+		background-color: $bg-color;
+		@if $text-color {
+			color: $text-color;
+		}
+	}
+}
+
+@mixin section-spacing($spacing: $spacing-3xl) {
+	margin-bottom: $spacing;
+}
+
+@mixin padding-xy($x, $y) {
+	padding: $y $x;
+}
+
+@mixin margin-xy($x, $y) {
+	margin: $y $x;
+}
+
+@mixin mobile {
+	@media (max-width: $breakpoint-mobile) {
+		@content;
+	}
+}
+@mixin tablet {
+	@media (max-width: $breakpoint-tablet) {
+		@content;
+	}
+}
+
+@mixin desktop {
+	@media (min-width: $breakpoint-desktop) {
+		@content;
+	}
+}
+
+@mixin custom-breakpoint($width) {
+	@media (max-width: $width) {
+		@content;
+	}
+}
+
+@mixin responsive-image {
+	width: 100%;
+	height: auto;
+	display: block;
+	object-fit: cover;
+}
+
+@mixin aspect-ratio($width, $height) {
+	position: relative;
+	overflow: hidden;
+
+	&::before {
+		content: '';
+		display: block;
+		padding-top: calc(($height / $width) * 100%);
+	}
+
+	img,
+	video {
+		@include cover-parent;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+@mixin custom-scrollbar(
+	$width: 8px,
+	$track-color: transparent,
+	$thumb-color: $color-text
+) {
+	&::-webkit-scrollbar {
+		width: $width;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: $track-color;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: $thumb-color;
+		border-radius: $width;
+
+		&:hover {
+			background: darken($thumb-color, 10%);
+		}
+	}
+}
+
+@mixin hide-scrollbar {
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+@mixin visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+@mixin reset-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+@mixin reset-button {
+	background: none;
+	border: none;
+	padding: 0;
+	margin: 0;
+	cursor: pointer;
+	font: inherit;
+	color: inherit;
+}
+
+@mixin clearfix {
+	&::after {
+		content: '';
+		display: table;
+		clear: both;
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/styles/utils/_reset.scss
+────────────────────────────────────────────────────────────────────────────────
+
+@use 'variables' as *;
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 16px;
+}
+
+body {
+	font-family: $font-family;
+	font-size: $font-size-md;
+	line-height: 1.5;
+	color: $color-text;
+	background-color: $color-secondary;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea,
+select {
+	font-family: inherit;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+ul,
+ol {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+img {
+	max-width: 100%;
+	display: block;
+}
+
+button {
+	cursor: pointer;
+	border: none;
+	background: none;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/styles/utils/_variables.scss
+────────────────────────────────────────────────────────────────────────────────
+
+$color-primary: #080423;
+$color-secondary: #ffffff;
+$color-accent: #ff3d81;
+$color-text: #7a7a7a;
+$color-text-lighter: #fff9f9;
+
+$color-hovered-accent: #e73774;
+
+$font-family: 'MyFont', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+	sans-serif;
+
+$font-size-sm: 0.875rem; // 14px
+$font-size-md: 1rem; // 16px
+$font-size-lg: 1.125rem; // 18px
+$font-size-xl: 1.875rem; // 30px
+$font-size-2xl: 2.5rem; // 40px
+$font-size-3xl: 3.75rem; // 60px
+
+$spacing-xs: 0.25rem; // 4px
+$spacing-sm: 0.5rem; // 8px
+$spacing-2sm: 0.7rem; // 11px
+$spacing-md: 1rem; // 16px
+$spacing-lg: 1.5rem; // 24px
+$spacing-xl: 2rem; // 32px
+$spacing-1xl: 2.5rem; // 40px
+$spacing-2xl: 3rem; // 48px
+$spacing-3xl: 3.75rem; // 60px
+
+$radius-sm: 10px;
+$radius-lg: 60px;
+
+$breakpoint-mobile: 500px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/contentCatalog/ContentCatalog.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import { Breadcrumbs } from '@/features/breadcrumbs';
+import Tab from '@/shared/ui/Tab/Tab';
+import Tabs from '@/shared/ui/Tabs/Tabs';
+import VideoList from '../videoList/VideoList';
+import { useNavigate } from 'react-router-dom';
+
+const ContentCatalog = () => {
+	const navigate = useNavigate();
+
+	return (
+		<section className={styles.content}>
+			<Tabs defaultActiveIndex={0}>
+				<Tab label='Популярные фильмы'>
+					<VideoList limit={12} category={'TOP_POPULAR_MOVIES'} />
+				</Tab>
+				<Tab label='Популярные сериалы'>
+					<VideoList limit={12} category={'POPULAR_SERIES'} />
+				</Tab>
+				<Tab label='Подборка фильмов'>
+					<VideoList limit={12} category={'TOP_250_MOVIES'} />
+				</Tab>
+			</Tabs>
+			<Breadcrumbs>
+				<Breadcrumbs.Item children={'Смотреть все'} to={'movie'} />
+			</Breadcrumbs>
+			<VideoList limit={12} />
+		</section>
+	);
+};
+
+export default ContentCatalog;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/contentCatalog/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.content {
+	margin-bottom: 100px;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/footer/Footer.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import Logo from '@/shared/ui/Logo/Logo';
+import styles from './styles.module.scss';
+import Navigation from '@/widgets/navigation/Navigation';
+
+const Footer = () => {
+	return (
+		<footer className={styles.footer}>
+			<Logo />
+			<Navigation />
+		</footer>
+	);
+};
+
+export default Footer;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/footer/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.footer {
+	@include flex-between;
+	padding: $spacing-2xl;
+	background-color: $color-primary;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/header/Header.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import Logo from '@/shared/ui/Logo/Logo';
+import Search from '@/features/searchVideo/ui/SearchVideo/SearchVideo';
+
+const Header = () => {
+	return (
+		<header className={styles.header}>
+			<Logo />
+			<Search />
+		</header>
+	);
+};
+
+export default Header;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/header/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.header {
+	@include flex-align($gap: 124px);
+	@include padding-xy(calc($spacing-2xl * 2), $spacing-md);
+	font-weight: 400;
+	background-color: $color-primary;
+	color: $color-accent;
+}
+
+.logo {
+	font-family: 'Bayon';
+	letter-spacing: 5px;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/heroBanner/HeroBanner.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import VideoHero from '@/entities/video/ui/VideoHero/VideoHero';
+import { useVideos } from '@/shared/hooks/useVideos';
+import Image from '@/shared/ui/Image/Image';
+
+const HeroBanner = () => {
+	const { items } = useVideos(1);
+	const { kinopoiskId, nameRu, description, shortDescription, posterUrl } =
+		items?.[0] || {};
+
+	return (
+		<section className={styles.banner}>
+			<VideoHero
+				id={kinopoiskId}
+				title={nameRu}
+				description={shortDescription ? shortDescription : description}
+			/>
+			<Image src={posterUrl} alt={'banner'} type='banner' />
+		</section>
+	);
+};
+
+export default HeroBanner;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/heroBanner/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.banner {
+	@include flex-align($gap: calc($spacing-xl * 1.25));
+	padding: $spacing-xl;
+	border-radius: $radius-sm;
+	background: #0c0a2a;
+	margin-bottom: 100px;
+
+	@include tablet {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
+
+.bannerImage {
+	flex: 1;
+
+	img {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.content {
+	color: $color-secondary;
+	flex: 1;
+}
+
+.title {
+	text-transform: uppercase;
+	@include section-spacing($spacing-xl);
+}
+
+.badge {
+	text-transform: uppercase;
+	margin-bottom: calc($spacing-3xl + 40px);
+}
+
+.description {
+	font-size: $font-size-lg;
+	@include section-spacing($spacing-2xl);
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/index.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import ContentCatalog from './contentCatalog/ContentCatalog';
+import Footer from './footer/Footer';
+import Header from './header/Header';
+import HeroBanner from './heroBanner/HeroBanner';
+import Navigation from './navigation/Navigation';
+import VideoFilters from './videoFilters/VideoFilters';
+
+export { ContentCatalog, Footer, Header, HeroBanner, Navigation, VideoFilters };
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/navigation/Navigation.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import { Link } from 'react-router-dom';
+
+const Navigation = () => {
+	return (
+		<nav className={styles.navigation}>
+			<Link to={'/'}>Главная</Link>
+			<Link to={'/popular-movies'}>Популярные фильмы</Link>
+			<Link to={'/popular-series'}>Популярные сериалы</Link>
+		</nav>
+	);
+};
+
+export default Navigation;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/navigation/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.navigation {
+	@include flex-align($gap: $spacing-1xl);
+	color: $color-text-lighter;
+
+	a {
+		@include transition(color);
+
+		&:hover {
+			color: $color-accent;
+		}
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/videoDescription/VideoDescription.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import Image from '@/shared/ui/Image/Image';
+import VideoDetails from '../../entities/video/ui/VideoDetails/VideoDetails';
+import VideoFacts from '../../entities/video/ui/VideoFacts/VideoFacts';
+import { useParams } from 'react-router-dom';
+import {
+	useGetMovieByIdQuery,
+	useGetStaffByIdQuery,
+} from '../../entities/video/api/api';
+
+const VideoDescription = () => {
+	const { id } = useParams<{ id: string }>();
+	const { data: video } = useGetMovieByIdQuery(id);
+	const { data: staff } = useGetStaffByIdQuery(id);
+
+	return (
+		<>
+			<section className={styles.info}>
+				<Image src={video?.posterUrl} alt={video?.nameRu} />
+				<article className={styles.description}>
+					<VideoDetails
+						title={video?.nameRu}
+						description={video?.description}
+					/>
+					<VideoFacts video={video} staff={staff} />
+				</article>
+			</section>
+		</>
+	);
+};
+
+export default VideoDescription;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/videoDescription/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.info {
+	display: flex;
+	gap: 35px;
+	margin-bottom: 80px;
+}
+
+.description {
+	display: flex;
+	flex-direction: column;
+	gap: 50px;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/videoFilters/VideoFilters.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import { FilterPanel } from '@/features/filterVideos';
+import VideoList from '../videoList/VideoList';
+
+const VideoFilters = () => {
+	return (
+		<section className={styles.filters}>
+			<h3 className={styles.title}>Фильмы по категориям</h3>
+			<FilterPanel />
+			<VideoList limit={12} />
+		</section>
+	);
+};
+
+export default VideoFilters;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/videoFilters/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.filters {
+	margin-bottom: 100px;
+}
+
+.title {
+	display: inline;
+	margin-bottom: 40px;
+	padding: 11px 29px;
+	color: $color-secondary;
+	background-color: $color-primary;
+	border-radius: $radius-lg;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/videoFrames/ui/FrameList/FrameList.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import type { Video } from '@/entities/video';
+import Image from '@/shared/ui/Image/Image';
+
+interface Props {
+	video?: Video;
+}
+
+const FrameList = ({ video }: Props) => {
+	return (
+		<ul className={styles.list}>
+			<li className={styles.frame}>
+				{
+					<Image
+						src={video?.posterUrlPreview}
+						alt={video?.nameRu}
+						type='frame'
+					/>
+				}
+			</li>
+			<li className={styles.frame}>
+				{
+					<Image
+						src={video?.posterUrlPreview}
+						alt={video?.nameRu}
+						type='frame'
+					/>
+				}
+			</li>
+			<li className={styles.frame}>
+				{
+					<Image
+						src={video?.posterUrlPreview}
+						alt={video?.nameRu}
+						type='frame'
+					/>
+				}
+			</li>
+			<li className={styles.frame}>
+				{
+					<Image
+						src={video?.posterUrlPreview}
+						alt={video?.nameRu}
+						type='frame'
+					/>
+				}
+			</li>
+			<li className={styles.frame}>
+				{
+					<Image
+						src={video?.posterUrlPreview}
+						alt={video?.nameRu}
+						type='frame'
+					/>
+				}
+			</li>
+			<li className={styles.frame}>
+				{
+					<Image
+						src={video?.posterUrlPreview}
+						alt={video?.nameRu}
+						type='frame'
+					/>
+				}
+			</li>
+		</ul>
+	);
+};
+
+export default FrameList;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/videoFrames/ui/FrameList/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.list {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(300px, 400px));
+	gap: 15px;
+	justify-content: center;
+	width: 100%;
+}
+
+.frame {
+	width: 100%;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/videoFrames/ui/VideoFrames.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import FrameList from './FrameList/FrameList';
+import { Breadcrumbs } from '@/features/breadcrumbs';
+import { useGetMovieByIdQuery } from '@/entities/video/api/api';
+import { useParams } from 'react-router-dom';
+
+const VideoFrames = () => {
+	const { id } = useParams<{ id: string }>();
+	const { data: video } = useGetMovieByIdQuery(id);
+
+	return (
+		<section className={styles.frames}>
+			<h3 className={styles.title}>Кадры из фильма</h3>
+			<Breadcrumbs>
+				<Breadcrumbs.Item to='/' direction='next'>
+					Смотреть все
+				</Breadcrumbs.Item>
+			</Breadcrumbs>
+			<FrameList video={video} />
+		</section>
+	);
+};
+
+export default VideoFrames;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/videoFrames/ui/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.frames {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 80px;
+}
+
+.title {
+	display: inline-flex;
+	align-self: center;
+	padding: 11px 45px;
+	color: $color-secondary;
+	background-color: $color-primary;
+	border-radius: $radius-lg;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/videoList/VideoList.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import VideoCard from '@/entities/video/ui/VideoCard/VideoCard';
+import { useVideos } from '@/shared/hooks/useVideos';
+
+interface Props {
+	limit: number;
+	category?: string;
+}
+
+const VideoList = ({ limit, category = 'TOP_POPULAR_MOVIES' }: Props) => {
+	const { items } = useVideos(limit, category);
+
+	return (
+		<ul className={styles.list}>
+			{items &&
+				items.map(video => <VideoCard key={video.kinopoiskId} video={video} />)}
+		</ul>
+	);
+};
+
+export default VideoList;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/videoList/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, 315px);
+	gap: $spacing-lg;
+	justify-content: space-evenly;
+	align-content: start;
+
+	@media (max-width: 1400px) {
+		grid-template-columns: repeat(auto-fit, 315px);
+	}
+
+	@media (max-width: 1024px) {
+		grid-template-columns: repeat(auto-fit, minmax(280px, 315px));
+	}
+
+	@media (max-width: 640px) {
+		grid-template-columns: minmax(0, 1fr);
+		justify-content: stretch;
+	}
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/videoSimilar/VideoSimilar.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import { useGetSimilarMoviesQuery } from '@/entities/video/api/api';
+import { useParams } from 'react-router-dom';
+import VideoList from '../videoList/VideoList';
+
+const VideoSimilar = () => {
+	const { id } = useParams<{ id: string }>();
+	const { data: similar } = useGetSimilarMoviesQuery(id);
+
+	return (
+		<section className={styles.similar}>
+			<h3 className={styles.title}>Возможно, вам понравится</h3>
+			<VideoList limit={4} />
+		</section>
+	);
+};
+
+export default VideoSimilar;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/videoSimilar/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.similar {
+	display: flex;
+	flex-direction: column;
+	gap: 40px;
+}
+
+.title {
+	display: inline-flex;
+	align-self: center;
+	color: $color-primary;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: tsconfig.json
+────────────────────────────────────────────────────────────────────────────────
+
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: tsconfig.node.json
+────────────────────────────────────────────────────────────────────────────────
+
+{
+	"compilerOptions": {
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+		"target": "ES2023",
+		"lib": ["ES2023"],
+		"module": "ESNext",
+		"types": ["node"],
+		"skipLibCheck": true,
+
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"moduleDetection": "force",
+		"noEmit": true,
+
+		/* Linting */
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"erasableSyntaxOnly": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedSideEffectImports": true
+	},
+	"include": ["vite.config.ts"]
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: vite.config.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+
+export default defineConfig({
+	plugins: [react()],
+	resolve: {
+		alias: {
+			'@': path.resolve(__dirname, 'src'),
+			'@app': path.resolve(__dirname, 'src/app'),
+			'@pages': path.resolve(__dirname, 'src/pages'),
+			'@widgets': path.resolve(__dirname, 'src/widgets'),
+			'@features': path.resolve(__dirname, 'src/features'),
+			'@entities': path.resolve(__dirname, 'src/entities'),
+			'@shared': path.resolve(__dirname, 'src/shared'),
+			'@styles': path.resolve(__dirname, 'src/styles'),
+		},
+	},
+	css: {
+		preprocessorOptions: {
+			scss: {
+				additionalData: `@use "@/styles/utils" as *;`,
+			},
+		},
+	},
+});
+
+
+================================================================================
+# END OF PROJECT CONTEXT

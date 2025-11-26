@@ -1,0 +1,12 @@
+.navigation {
+	@include flex-align($gap: $spacing-1xl);
+	color: $color-text-lighter;
+
+	a {
+		@include transition(color);
+
+		&:hover {
+			color: $color-accent;
+		}
+	}
+}

@@ -1,0 +1,5 @@
+.footer {
+	@include flex-between;
+	padding: $spacing-2xl;
+	background-color: $color-primary;
+}

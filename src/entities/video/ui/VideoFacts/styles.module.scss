@@ -1,0 +1,20 @@
+.facts {
+	color: $color-primary;
+	max-width: 300px;
+}
+
+.title {
+	margin-bottom: $spacing-lg;
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-lg;
+	color: $color-text;
+}
+
+.item {
+	display: flex;
+	justify-content: space-between;
+}

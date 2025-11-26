@@ -1,0 +1,7 @@
+.header {
+	@include flex-align($gap: calc($spacing-3xl * 2 + $spacing-xs));
+	@include padding-xy(calc($spacing-2xl * 2), $spacing-md);
+	font-weight: 400;
+	background-color: $color-primary;
+	color: $color-accent;
+}

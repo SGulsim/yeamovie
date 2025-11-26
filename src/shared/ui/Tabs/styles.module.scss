@@ -1,0 +1,9 @@
+.container {
+	@include flex-column($gap: $spacing-xl);
+}
+
+.tabs {
+	display: flex;
+	gap: $spacing-lg;
+	margin-bottom: $spacing-xl;
+}

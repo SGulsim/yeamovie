@@ -1,0 +1,17 @@
+.poster {
+	object-fit: cover;
+	border-radius: $radius-sm;
+}
+
+.banner {
+	object-fit: cover;
+	border-radius: $radius-sm;
+	width: 765px;
+	height: 500px;
+}
+
+.frame {
+	width: 430px;
+	height: 420px;
+	border-radius: $radius-sm;
+}

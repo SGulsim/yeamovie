@@ -1,0 +1,20 @@
+.list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, 315px);
+	gap: $spacing-lg;
+	justify-content: space-evenly;
+	align-content: start;
+
+	@media (max-width: 1400px) {
+		grid-template-columns: repeat(auto-fit, 315px);
+	}
+
+	@media (max-width: 1024px) {
+		grid-template-columns: repeat(auto-fit, minmax(280px, 315px));
+	}
+
+	@media (max-width: 640px) {
+		grid-template-columns: minmax(0, 1fr);
+		justify-content: stretch;
+	}
+}

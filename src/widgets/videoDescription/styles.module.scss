@@ -1,0 +1,11 @@
+.info {
+	display: flex;
+	gap: $spacing-2xl;
+	@include section-spacing(calc($spacing-3xl + $spacing-lg));
+}
+
+.description {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-3xl;
+}
