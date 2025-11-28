@@ -14,16 +14,16 @@ const VideoDescription = () => {
 	const { data: video, isLoading } = useGetMovieByIdQuery(id);
 	const { data: staff } = useGetStaffByIdQuery(id);
 
-	if (isLoading) {
-		return <VideoDescriptionSkeleton />;
-	}
+	if (!video || !staff) return null;
+
+	if (isLoading) return <VideoDescriptionSkeleton />;
 
 	return (
 		<section className={styles.info}>
-			<Image src={video?.posterUrl} alt={video?.nameRu} />
+			<Image src={video.posterUrl} alt={video.nameRu} />
 			<article className={styles.description}>
-				<VideoDetails title={video?.nameRu} description={video?.description} />
-				{video && staff && <VideoFacts video={video} staff={staff} />}
+				<VideoDetails title={video.nameRu} description={video.description} />
+				<VideoFacts video={video} staff={staff} />
 			</article>
 		</section>
 	);

@@ -1,5 +1,5 @@
 # PROJECT CONTEXT
-# Generated: 2025-11-28T06:16:43.187Z
+# Generated: 2025-11-28T08:24:17.034Z
 
 ================================================================================
 
@@ -52,6 +52,7 @@
   src/pages/video/ui/styles.module.scss
   src/shared/constants/info.js
   src/shared/constants/movies.js
+  src/shared/hooks/useSearch.ts
   src/shared/hooks/useVideos.ts
   src/shared/interfaces/interfaces.ts
   src/shared/ui/Button/Button.tsx
@@ -92,6 +93,8 @@
   src/widgets/index.ts
   src/widgets/navigation/Navigation.tsx
   src/widgets/navigation/styles.module.scss
+  src/widgets/searchResults/SearchResults.tsx
+  src/widgets/searchResults/styles.module.scss
   src/widgets/videoDescription/VideoDescription.tsx
   src/widgets/videoDescription/VideoDescriptionSkeleton.tsx
   src/widgets/videoDescription/styles.module.scss
@@ -303,10 +306,12 @@ import type {
 	Video,
 	VideosApiResponse,
 	SimilarFilmsResponse,
+	SearchByKeywordResponse,
 } from '../model/types';
 
 const BASE_URL = import.meta.env.VITE_VIDEOS_BASE_URL;
 const STAFF_URL = import.meta.env.VITE_VIDEOS_STAFF_URL;
+const SEARCH_URL = import.meta.env.VITE_VIDEOS_SEARCH_URL;
 const API_KEY = import.meta.env.VITE_VIDEOS_API_KEY;
 
 export const videosApi = createApi({
@@ -341,6 +346,13 @@ export const videosApi = createApi({
 				params: { filmId: id },
 			}),
 		}),
+		getMovieBySearch: builder.query<SearchByKeywordResponse[], string>({
+			keepUnusedDataFor: 0,
+			query: keyword => ({
+				url: `${SEARCH_URL}/films/search-by-keyword`,
+				params: { keyword },
+			}),
+		}),
 		getSimilarMovies: builder.query<SimilarFilmsResponse, string>({
 			keepUnusedDataFor: 0,
 			query: id => ({
@@ -356,6 +368,7 @@ export const {
 	useGetMovieByIdQuery,
 	useGetStaffByIdQuery,
 	useGetSimilarMoviesQuery,
+	useGetMovieBySearchQuery,
 } = videosApi;
 
 
@@ -383,20 +396,24 @@ FILE: src/entities/video/lib/formatFacts.tsx
 import type { Country, Genre, Staff } from '../model/types';
 
 export const formatGenres = (genres: Genre[]) => {
+	if (!genres?.length) return '-';
 	return genres.map(({ genre }) => genre).join(', ');
 };
 
 export const formatCountries = (countries: Country[]) => {
+	if (!countries?.length) return '-';
 	return countries.map(({ country }) => country).join(', ');
 };
 
 export const getProducer = (staff?: Staff[]) => {
-	return staff?.find(item => item.professionKey === 'PRODUCER')?.nameRu;
+	if (!staff?.length) return '-';
+	return staff.find(item => item.professionKey === 'PRODUCER')?.nameRu;
 };
 
 export const getActors = (staff?: Staff[], limit = 5) => {
+	if (!staff?.length) return '-';
 	return staff
-		?.filter(item => item.professionKey === 'ACTOR')
+		.filter(item => item.professionKey === 'ACTOR')
 		.slice(0, limit)
 		.map(actor => actor.nameRu)
 		.join(', ');
@@ -459,6 +476,7 @@ export interface SimilarFilmsResponse {
 }
 
 export interface Video {
+	filmId: number;
 	kinopoiskId: number;
 	imdbId: string;
 	nameRu: string;
@@ -492,6 +510,13 @@ export interface Staff {
 	posterUrl: string;
 	professionText: string;
 	professionKey: string;
+}
+
+export interface SearchByKeywordResponse {
+	keyword: string;
+	pagesCount: number;
+	searchFilmsCountResult: number;
+	films: Video[];
 }
 
 
@@ -661,11 +686,13 @@ import {
 } from '../../lib/formatFacts';
 
 interface Props {
-	video: Video;
-	staff: Staff[];
+	video?: Video;
+	staff?: Staff[];
 }
 
 const VideoFacts = ({ video, staff }: Props) => {
+	if (!video || !staff) return null;
+
 	const facts = [
 		{ label: 'Жанр', value: formatGenres(video.genres) },
 		{ label: 'Страна', value: formatCountries(video.countries) },
@@ -678,7 +705,7 @@ const VideoFacts = ({ video, staff }: Props) => {
 			<h3 className={styles.title}>О фильме</h3>
 			<ul className={styles.list}>
 				{facts.map(({ label, value }) => (
-					<FactItem label={label} value={value} />
+					<FactItem key={label} label={label} value={value} />
 				))}
 			</ul>
 		</div>
@@ -1098,8 +1125,15 @@ export { SearchPage };
 FILE: src/pages/search/ui/SearchPage.tsx
 ────────────────────────────────────────────────────────────────────────────────
 
+import SearchResults from '@/widgets/searchResults/SearchResults';
+
 const SearchPage = () => {
-	return <main>search</main>;
+	return (
+		<main>
+			<h3>Результаты поиска</h3>
+			<SearchResults />
+		</main>
+	);
 };
 
 export default SearchPage;
@@ -1266,6 +1300,34 @@ const movies = [
 	},
 ];
 export default movies;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/hooks/useSearch.ts
+────────────────────────────────────────────────────────────────────────────────
+
+import { useGetMovieBySearchQuery } from '@/entities/video/api/api';
+
+export const useSearch = (keyword: string) => {
+	const { data, isLoading, isError } = useGetMovieBySearchQuery(keyword);
+
+	if (!data) {
+		return {
+			films: [],
+			isLoading,
+			isError,
+		};
+	}
+
+	return {
+		keyword: data.keyword,
+    pagesCount: data.pagesCount,
+    searchFilmsCountResult: data.searchFilmsCountResult;
+		films: data.films,
+		isLoading,
+		isError
+	};
+};
 
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -2511,7 +2573,8 @@ export default HeroBannerSkeleton;
 FILE: src/widgets/heroBanner/styles.module.scss
 ────────────────────────────────────────────────────────────────────────────────
 
-.banner {
+.banner,
+.bannerSkeleton {
 	@include flex-align($gap: $spacing-1xl);
 	padding: $spacing-xl;
 	border-radius: $radius-sm;
@@ -2522,10 +2585,6 @@ FILE: src/widgets/heroBanner/styles.module.scss
 		flex-direction: column;
 		align-items: flex-start;
 	}
-}
-
-.bannerSkeleton {
-	display: flex;
 }
 
 .videoHero {
@@ -2598,6 +2657,40 @@ FILE: src/widgets/navigation/styles.module.scss
 
 
 ────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/searchResults/SearchResults.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import { useSearch } from '@/shared/hooks/useSearch';
+import { useState } from 'react';
+
+const SearchResults = () => {
+	const [searchQuery, setSearchQuery] = useState('');
+	const data = useSearch(searchQuery);
+	console.log(data);
+
+	return (
+		<div>
+			<input
+				type='text'
+				value={searchQuery}
+				onChange={e => setSearchQuery(e.target.value)}
+			/>
+			<div>{searchQuery}</div>
+		</div>
+	);
+};
+
+export default SearchResults;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/searchResults/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+
+
+────────────────────────────────────────────────────────────────────────────────
 FILE: src/widgets/videoDescription/VideoDescription.tsx
 ────────────────────────────────────────────────────────────────────────────────
 
@@ -2617,23 +2710,18 @@ const VideoDescription = () => {
 	const { data: video, isLoading } = useGetMovieByIdQuery(id);
 	const { data: staff } = useGetStaffByIdQuery(id);
 
-	if (isLoading) {
-		return <VideoDescriptionSkeleton />;
-	}
+	if (!video || !staff) return null;
+
+	if (isLoading) return <VideoDescriptionSkeleton />;
 
 	return (
-		<>
-			<section className={styles.info}>
-				<Image src={video?.posterUrl} alt={video?.nameRu} />
-				<article className={styles.description}>
-					<VideoDetails
-						title={video?.nameRu}
-						description={video?.description}
-					/>
-					<VideoFacts video={video} staff={staff} />
-				</article>
-			</section>
-		</>
+		<section className={styles.info}>
+			<Image src={video.posterUrl} alt={video.nameRu} />
+			<article className={styles.description}>
+				<VideoDetails title={video.nameRu} description={video.description} />
+				<VideoFacts video={video} staff={staff} />
+			</article>
+		</section>
 	);
 };
 
@@ -2648,16 +2736,14 @@ import styles from './styles.module.scss';
 
 const VideoDescriptionSkeleton = () => {
 	return (
-		<>
-			<section className={styles.infoSkeleton}>
-				<div className={styles.imageSkeleton}></div>
-				<div className={styles.detailsSkeleton}>
-					<h1 className={styles.movieNameSkeleton}></h1>
-					<p className={styles.descriptionSkeleton}></p>
-					<div className={styles.btnsSkeleton}></div>
-				</div>
-			</section>
-		</>
+		<section className={styles.infoSkeleton}>
+			<div className={styles.imageSkeleton}></div>
+			<div className={styles.detailsSkeleton}>
+				<h1 className={styles.movieNameSkeleton}></h1>
+				<p className={styles.descriptionSkeleton}></p>
+				<div className={styles.btnsSkeleton}></div>
+			</div>
+		</section>
 	);
 };
 
