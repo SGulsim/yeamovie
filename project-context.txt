@@ -1,5 +1,5 @@
 # PROJECT CONTEXT
-# Generated: 2025-11-26T19:11:02.719Z
+# Generated: 2025-11-28T06:16:43.187Z
 
 ================================================================================
 
@@ -9,12 +9,16 @@
   package.json
   src/app/appEntry.tsx
   src/app/appReducer.ts
+  src/app/appRouter.tsx
   src/app/appStore.ts
   src/app/layout/BaseLayout.tsx
   src/entities/video/api/api.ts
   src/entities/video/index.ts
+  src/entities/video/lib/formatFacts.tsx
   src/entities/video/model/slice.ts
   src/entities/video/model/types.ts
+  src/entities/video/ui/FactItem/FactItem.tsx
+  src/entities/video/ui/FactItem/styles.module.scss
   src/entities/video/ui/VideoCard/VideoCard.tsx
   src/entities/video/ui/VideoCard/styles.module.scss
   src/entities/video/ui/VideoDetails/VideoDetails.tsx
@@ -49,6 +53,7 @@
   src/shared/constants/info.js
   src/shared/constants/movies.js
   src/shared/hooks/useVideos.ts
+  src/shared/interfaces/interfaces.ts
   src/shared/ui/Button/Button.tsx
   src/shared/ui/Button/styles.module.scss
   src/shared/ui/Image/Image.tsx
@@ -82,11 +87,13 @@
   src/widgets/header/Header.tsx
   src/widgets/header/styles.module.scss
   src/widgets/heroBanner/HeroBanner.tsx
+  src/widgets/heroBanner/HeroBannerSkeleton.tsx
   src/widgets/heroBanner/styles.module.scss
   src/widgets/index.ts
   src/widgets/navigation/Navigation.tsx
   src/widgets/navigation/styles.module.scss
   src/widgets/videoDescription/VideoDescription.tsx
+  src/widgets/videoDescription/VideoDescriptionSkeleton.tsx
   src/widgets/videoDescription/styles.module.scss
   src/widgets/videoFilters/VideoFilters.tsx
   src/widgets/videoFilters/styles.module.scss
@@ -95,6 +102,7 @@
   src/widgets/videoFrames/ui/VideoFrames.tsx
   src/widgets/videoFrames/ui/styles.module.scss
   src/widgets/videoList/VideoList.tsx
+  src/widgets/videoList/VideoListSkeleton.tsx
   src/widgets/videoList/styles.module.scss
   src/widgets/videoSimilar/VideoSimilar.tsx
   src/widgets/videoSimilar/styles.module.scss
@@ -146,6 +154,7 @@ FILE: package.json
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0",
 		"react-redux": "^9.2.0",
+		"react-router": "^7.9.6",
 		"react-router-dom": "^7.9.6"
 	},
 	"devDependencies": {
@@ -172,28 +181,17 @@ FILE: src/app/appEntry.tsx
 ────────────────────────────────────────────────────────────────────────────────
 
 import '@styles/index.scss';
-import { MainPage } from '@/pages/home';
-import { VideoPage } from '@/pages/video';
-import { SearchPage } from '@/pages/search';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import BaseLayout from './layout/BaseLayout';
+import { RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './appStore';
+import { appRouter } from './appRouter';
 
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
 		<Provider store={store}>
-			<BrowserRouter>
-				<Routes>
-					<Route path='/' element={<BaseLayout />}>
-						<Route index element={<MainPage />} />
-						<Route path='movie/:id' element={<VideoPage />} />
-						<Route path='search' element={<SearchPage />} />
-					</Route>
-				</Routes>
-			</BrowserRouter>
+			<RouterProvider router={appRouter} />
 		</Provider>
 	</StrictMode>
 );
@@ -211,6 +209,38 @@ export const rootReducer = combineReducers({
 	videos: videosReducer,
 	[videosApi.reducerPath]: videosApi.reducer,
 });
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/app/appRouter.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import { createBrowserRouter } from 'react-router-dom';
+import BaseLayout from './layout/BaseLayout';
+import { MainPage } from '@/pages/home';
+import { VideoPage } from '@/pages/video';
+import { SearchPage } from '@/pages/search';
+
+export const appRouter = createBrowserRouter([
+	{
+		element: <BaseLayout />,
+		errorElement: <div>Error</div>,
+		children: [
+			{
+				path: '/',
+				element: <MainPage />,
+			},
+			{
+				path: '/movie/:id',
+				element: <VideoPage />,
+			},
+			{
+				path: '/search',
+				element: <SearchPage />,
+			},
+		],
+	},
+]);
 
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -245,23 +275,22 @@ FILE: src/app/layout/BaseLayout.tsx
 
 import { Header, Footer } from '@/widgets';
 import '@styles/_global.scss';
-import { Outlet } from 'react-router-dom';
+import { Outlet, ScrollRestoration } from 'react-router-dom';
 
-const BaseLayout = () => {
+export default function BaseLayout() {
 	return (
 		<>
 			<Header />
 
 			<div className='container'>
+				<ScrollRestoration />
 				<Outlet />
 			</div>
 
 			<Footer />
 		</>
 	);
-};
-
-export default BaseLayout;
+}
 
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -348,6 +377,33 @@ export { default as VideoDetails } from './ui/VideoDetails/VideoDetails';
 
 
 ────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/lib/formatFacts.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import type { Country, Genre, Staff } from '../model/types';
+
+export const formatGenres = (genres: Genre[]) => {
+	return genres.map(({ genre }) => genre).join(', ');
+};
+
+export const formatCountries = (countries: Country[]) => {
+	return countries.map(({ country }) => country).join(', ');
+};
+
+export const getProducer = (staff?: Staff[]) => {
+	return staff?.find(item => item.professionKey === 'PRODUCER')?.nameRu;
+};
+
+export const getActors = (staff?: Staff[], limit = 5) => {
+	return staff
+		?.filter(item => item.professionKey === 'ACTOR')
+		.slice(0, limit)
+		.map(actor => actor.nameRu)
+		.join(', ');
+};
+
+
+────────────────────────────────────────────────────────────────────────────────
 FILE: src/entities/video/model/slice.ts
 ────────────────────────────────────────────────────────────────────────────────
 
@@ -379,8 +435,12 @@ export default videosSlice.reducer;
 FILE: src/entities/video/model/types.ts
 ────────────────────────────────────────────────────────────────────────────────
 
-export interface Genres {
+export interface Genre {
 	genre: string;
+}
+
+export interface Country {
+	country: string;
 }
 
 export interface SimilarFilm {
@@ -412,8 +472,8 @@ export interface Video {
 	ratingImdb: number;
 	description: string;
 	shortDescription: string;
-	countries: string[];
-	genres: Genres[];
+	countries: Country[];
+	genres: Genre[];
 	year: number;
 	type: string;
 }
@@ -432,6 +492,40 @@ export interface Staff {
 	posterUrl: string;
 	professionText: string;
 	professionKey: string;
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/ui/FactItem/FactItem.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+import type { ReactNode } from 'react';
+
+interface Props {
+	label: string;
+	value: ReactNode;
+}
+
+const FactItem = ({ label, value }: Props) => {
+	return (
+		<li className={styles.item}>
+			<p>{label}</p>
+			<p>{value}</p>
+		</li>
+	);
+};
+
+export default FactItem;
+
+
+────────────────────────────────────────────────────────────────────────────────
+FILE: src/entities/video/ui/FactItem/styles.module.scss
+────────────────────────────────────────────────────────────────────────────────
+
+.item {
+	display: flex;
+	justify-content: space-between;
 }
 
 
@@ -489,15 +583,11 @@ FILE: src/entities/video/ui/VideoCard/styles.module.scss
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-	gap: 10px;
+	gap: $spacing-sm;
 
 	img {
 		height: 500px;
 	}
-}
-
-.posterImage {
-	height: 450px;
 }
 
 
@@ -541,28 +631,18 @@ FILE: src/entities/video/ui/VideoDetails/styles.module.scss
 	color: $color-primary;
 }
 
-.posterImage {
-	width: 100%;
-	height: 100%;
-
-	img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
-}
-
 .movieName {
-	margin-bottom: 30px;
+	margin-bottom: $spacing-2xl;
 	font-weight: bold;
 }
 
 .description {
-	margin-bottom: 30px;
+	margin-bottom: $spacing-2xl;
 }
 
 .btns {
 	display: flex;
+	margin-bottom: 3rem;
 }
 
 
@@ -572,6 +652,13 @@ FILE: src/entities/video/ui/VideoFacts/VideoFacts.tsx
 
 import styles from './styles.module.scss';
 import type { Staff, Video } from '../../model/types';
+import FactItem from '../FactItem/FactItem';
+import {
+	formatCountries,
+	formatGenres,
+	getActors,
+	getProducer,
+} from '../../lib/formatFacts';
 
 interface Props {
 	video: Video;
@@ -579,44 +666,20 @@ interface Props {
 }
 
 const VideoFacts = ({ video, staff }: Props) => {
+	const facts = [
+		{ label: 'Жанр', value: formatGenres(video.genres) },
+		{ label: 'Страна', value: formatCountries(video.countries) },
+		{ label: 'Год', value: video?.year },
+		{ label: 'Режиссер', value: getProducer(staff) },
+		{ label: 'В главных ролях', value: getActors(staff) },
+	];
 	return (
 		<div className={styles.facts}>
 			<h3 className={styles.title}>О фильме</h3>
 			<ul className={styles.list}>
-				<li className={styles.item}>
-					<p>Жанр</p>
-					<p>
-						{video?.genres.map(({ genre }) => (
-							<>
-								<span key={video.kinopoiskId}>{genre}</span>&nbsp;
-							</>
-						))}
-					</p>
-				</li>
-				<li className={styles.item}>
-					<p>Страна</p>
-					<p>
-						{video?.countries.map(({ country }) => (
-							<>
-								<span key={video.kinopoiskId}>{country}</span>
-							</>
-						))}
-					</p>
-				</li>
-				<li className={styles.item}>
-					<p>Год</p>
-					<p>{video?.year}</p>
-				</li>
-				<li className={styles.item}>
-					<p>Режиссер</p>
-					<p>
-						{staff?.find(item => item.professionText === 'PRODUCER')?.nameRu}
-					</p>
-				</li>
-				<li className={styles.item}>
-					<p>В главных ролях</p>
-					<p>{staff?.find(item => item.professionText === 'ACTOR')?.nameRu}</p>
-				</li>
+				{facts.map(({ label, value }) => (
+					<FactItem label={label} value={value} />
+				))}
 			</ul>
 		</div>
 	);
@@ -631,27 +694,17 @@ FILE: src/entities/video/ui/VideoFacts/styles.module.scss
 
 .facts {
 	color: $color-primary;
-	max-width: 300px;
 }
 
 .title {
-	margin-bottom: 20px;
+	margin-bottom: $spacing-lg;
 }
 
 .list {
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
+	gap: $spacing-lg;
 	color: $color-text;
-}
-
-.item {
-	display: flex;
-	justify-content: space-between;
-}
-
-.genre {
-	display: flex;
 }
 
 
@@ -701,7 +754,7 @@ FILE: src/entities/video/ui/VideoHero/styles.module.scss
 
 .status {
 	text-transform: uppercase;
-	margin-bottom: calc($spacing-3xl + 40px);
+	@include section-spacing(calc($spacing-3xl + $spacing-1xl));
 }
 
 .title {
@@ -757,7 +810,7 @@ FILE: src/entities/video/ui/VideoMeta/styles.module.scss
 .info {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: $spacing-xs;
 }
 
 
@@ -1254,6 +1307,13 @@ export const useVideos = (limit: number, category?: string) => {
 
 
 ────────────────────────────────────────────────────────────────────────────────
+FILE: src/shared/interfaces/interfaces.ts
+────────────────────────────────────────────────────────────────────────────────
+
+export type SkeletonType = 'banner' | 'item';
+
+
+────────────────────────────────────────────────────────────────────────────────
 FILE: src/shared/ui/Button/Button.tsx
 ────────────────────────────────────────────────────────────────────────────────
 
@@ -1428,6 +1488,7 @@ FILE: src/shared/ui/Image/styles.module.scss
 	object-fit: cover;
 	border-radius: $radius-sm;
 }
+
 .banner {
 	object-fit: cover;
 	border-radius: $radius-sm;
@@ -1438,6 +1499,7 @@ FILE: src/shared/ui/Image/styles.module.scss
 .frame {
 	width: 430px;
 	height: 420px;
+	border-radius: $radius-sm;
 }
 
 
@@ -1819,6 +1881,21 @@ FILE: src/styles/utils/_mixins.scss
 ────────────────────────────────────────────────────────────────────────────────
 
 @use 'variables' as *;
+
+@mixin skeleton-pulse {
+	background: linear-gradient(-90deg, #f0f0f0 0%, #f8f8f8 50%, #f0f0f0 100%);
+	background-size: 400% 400%;
+	animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+	0% {
+		background-position: 0% 0%;
+	}
+	100% {
+		background-position: -135% 0%;
+	}
+}
 
 @mixin flex-header {
 	display: flex;
@@ -2305,7 +2382,7 @@ FILE: src/widgets/contentCatalog/styles.module.scss
 ────────────────────────────────────────────────────────────────────────────────
 
 .content {
-	margin-bottom: 100px;
+	@include section-spacing(calc($spacing-3xl + $spacing-1xl));
 }
 
 
@@ -2365,16 +2442,11 @@ FILE: src/widgets/header/styles.module.scss
 ────────────────────────────────────────────────────────────────────────────────
 
 .header {
-	@include flex-align($gap: 124px);
+	@include flex-align($gap: calc($spacing-3xl * 2 + $spacing-xs));
 	@include padding-xy(calc($spacing-2xl * 2), $spacing-md);
 	font-weight: 400;
 	background-color: $color-primary;
 	color: $color-accent;
-}
-
-.logo {
-	font-family: 'Bayon';
-	letter-spacing: 5px;
 }
 
 
@@ -2386,11 +2458,16 @@ import styles from './styles.module.scss';
 import VideoHero from '@/entities/video/ui/VideoHero/VideoHero';
 import { useVideos } from '@/shared/hooks/useVideos';
 import Image from '@/shared/ui/Image/Image';
+import HeroBannerSkeleton from './HeroBannerSkeleton';
 
 const HeroBanner = () => {
-	const { items } = useVideos(1);
+	const { items, isLoading } = useVideos(1);
 	const { kinopoiskId, nameRu, description, shortDescription, posterUrl } =
 		items?.[0] || {};
+
+	if (isLoading) {
+		return <HeroBannerSkeleton />;
+	}
 
 	return (
 		<section className={styles.banner}>
@@ -2408,15 +2485,38 @@ export default HeroBanner;
 
 
 ────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/heroBanner/HeroBannerSkeleton.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+
+const HeroBannerSkeleton = () => {
+	return (
+		<section className={styles.bannerSkeleton}>
+			<div className={styles.videoHero}>
+				<div className={styles.statusSkeleton} />
+				<div className={styles.titleSkeleton} />
+				<div className={styles.descriptionSkeleton} />
+				<div className={styles.buttonSkeleton} />
+			</div>
+			<div className={styles.image} />
+		</section>
+	);
+};
+
+export default HeroBannerSkeleton;
+
+
+────────────────────────────────────────────────────────────────────────────────
 FILE: src/widgets/heroBanner/styles.module.scss
 ────────────────────────────────────────────────────────────────────────────────
 
 .banner {
-	@include flex-align($gap: calc($spacing-xl * 1.25));
+	@include flex-align($gap: $spacing-1xl);
 	padding: $spacing-xl;
 	border-radius: $radius-sm;
 	background: #0c0a2a;
-	margin-bottom: 100px;
+	@include section-spacing(calc($spacing-3xl + $spacing-1xl));
 
 	@include tablet {
 		flex-direction: column;
@@ -2424,33 +2524,24 @@ FILE: src/widgets/heroBanner/styles.module.scss
 	}
 }
 
-.bannerImage {
+.bannerSkeleton {
+	display: flex;
+}
+
+.videoHero {
 	flex: 1;
-
-	img {
-		width: 100%;
-		height: 100%;
-	}
+	min-height: 300px;
 }
 
-.content {
-	color: $color-secondary;
-	flex: 1;
+.image {
+	width: 765px;
+	height: 500px;
+	border-radius: $radius-sm;
 }
 
-.title {
-	text-transform: uppercase;
-	@include section-spacing($spacing-xl);
-}
-
-.badge {
-	text-transform: uppercase;
-	margin-bottom: calc($spacing-3xl + 40px);
-}
-
-.description {
-	font-size: $font-size-lg;
-	@include section-spacing($spacing-2xl);
+.videoHero,
+.image {
+	@include skeleton-pulse;
 }
 
 
@@ -2519,11 +2610,16 @@ import {
 	useGetMovieByIdQuery,
 	useGetStaffByIdQuery,
 } from '../../entities/video/api/api';
+import VideoDescriptionSkeleton from './VideoDescriptionSkeleton';
 
 const VideoDescription = () => {
 	const { id } = useParams<{ id: string }>();
-	const { data: video } = useGetMovieByIdQuery(id);
+	const { data: video, isLoading } = useGetMovieByIdQuery(id);
 	const { data: staff } = useGetStaffByIdQuery(id);
+
+	if (isLoading) {
+		return <VideoDescriptionSkeleton />;
+	}
 
 	return (
 		<>
@@ -2545,19 +2641,68 @@ export default VideoDescription;
 
 
 ────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/videoDescription/VideoDescriptionSkeleton.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+
+const VideoDescriptionSkeleton = () => {
+	return (
+		<>
+			<section className={styles.infoSkeleton}>
+				<div className={styles.imageSkeleton}></div>
+				<div className={styles.detailsSkeleton}>
+					<h1 className={styles.movieNameSkeleton}></h1>
+					<p className={styles.descriptionSkeleton}></p>
+					<div className={styles.btnsSkeleton}></div>
+				</div>
+			</section>
+		</>
+	);
+};
+
+export default VideoDescriptionSkeleton;
+
+
+────────────────────────────────────────────────────────────────────────────────
 FILE: src/widgets/videoDescription/styles.module.scss
 ────────────────────────────────────────────────────────────────────────────────
 
-.info {
+.info,
+.infoSkeleton {
 	display: flex;
-	gap: 35px;
-	margin-bottom: 80px;
+	gap: $spacing-2xl;
+	@include section-spacing(calc($spacing-3xl + $spacing-lg));
 }
 
-.description {
+.detailsSkeleton {
 	display: flex;
 	flex-direction: column;
-	gap: 50px;
+	gap: 30px;
+}
+
+.imageSkeleton {
+	width: 100%;
+	max-width: 482px;
+	aspect-ratio: 482 / 650;
+}
+
+.movieNameSkeleton,
+.btnsSkeleton {
+	width: 316px;
+	height: 95px;
+}
+
+.descriptionSkeleton {
+	width: 482px;
+	height: 400px;
+}
+
+.imageSkeleton,
+.descriptionSkeleton,
+.movieNameSkeleton,
+.btnsSkeleton {
+	@include skeleton-pulse;
 }
 
 
@@ -2587,13 +2732,13 @@ FILE: src/widgets/videoFilters/styles.module.scss
 ────────────────────────────────────────────────────────────────────────────────
 
 .filters {
-	margin-bottom: 100px;
+	@include section-spacing(calc($spacing-3xl + $spacing-1xl));
 }
 
 .title {
-	display: inline;
-	margin-bottom: 40px;
-	padding: 11px 29px;
+	display: inline-flex;
+	margin-bottom: $spacing-1xl;
+	padding: $spacing-2sm $spacing-xl;
 	color: $color-secondary;
 	background-color: $color-primary;
 	border-radius: $radius-lg;
@@ -2683,7 +2828,7 @@ FILE: src/widgets/videoFrames/ui/FrameList/styles.module.scss
 .list {
 	display: grid;
 	grid-template-columns: repeat(3, minmax(300px, 400px));
-	gap: 15px;
+	gap: $spacing-md;
 	justify-content: center;
 	width: 100%;
 }
@@ -2730,13 +2875,14 @@ FILE: src/widgets/videoFrames/ui/styles.module.scss
 .frames {
 	display: flex;
 	flex-direction: column;
-	margin-bottom: 80px;
+	@include section-spacing(calc($spacing-3xl + $spacing-lg));
 }
 
 .title {
 	display: inline-flex;
 	align-self: center;
-	padding: 11px 45px;
+	padding: $spacing-2sm calc($spacing-2xl + $spacing-md);
+	margin-bottom: $spacing-3xl;
 	color: $color-secondary;
 	background-color: $color-primary;
 	border-radius: $radius-lg;
@@ -2750,6 +2896,7 @@ FILE: src/widgets/videoList/VideoList.tsx
 import styles from './styles.module.scss';
 import VideoCard from '@/entities/video/ui/VideoCard/VideoCard';
 import { useVideos } from '@/shared/hooks/useVideos';
+import VideoListSkeleton from './VideoListSkeleton';
 
 interface Props {
 	limit: number;
@@ -2757,7 +2904,11 @@ interface Props {
 }
 
 const VideoList = ({ limit, category = 'TOP_POPULAR_MOVIES' }: Props) => {
-	const { items } = useVideos(limit, category);
+	const { items, isLoading } = useVideos(limit, category);
+
+	if (isLoading) {
+		return <VideoListSkeleton count={limit} />;
+	}
 
 	return (
 		<ul className={styles.list}>
@@ -2771,10 +2922,34 @@ export default VideoList;
 
 
 ────────────────────────────────────────────────────────────────────────────────
+FILE: src/widgets/videoList/VideoListSkeleton.tsx
+────────────────────────────────────────────────────────────────────────────────
+
+import styles from './styles.module.scss';
+
+interface Props {
+	count: number;
+}
+
+const VideoListSkeleton = ({ count }: Props) => {
+	return (
+		<ul className={styles.listSkeleton}>
+			{Array.from({ length: count }, (_, i) => (
+				<li key={i} className={styles.itemSkeleton} />
+			))}
+		</ul>
+	);
+};
+
+export default VideoListSkeleton;
+
+
+────────────────────────────────────────────────────────────────────────────────
 FILE: src/widgets/videoList/styles.module.scss
 ────────────────────────────────────────────────────────────────────────────────
 
-.list {
+.list,
+.listSkeleton {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, 315px);
 	gap: $spacing-lg;
@@ -2793,6 +2968,12 @@ FILE: src/widgets/videoList/styles.module.scss
 		grid-template-columns: minmax(0, 1fr);
 		justify-content: stretch;
 	}
+}
+
+.itemSkeleton {
+	@include skeleton-pulse;
+	width: 315px;
+	height: 315px;
 }
 
 
@@ -2827,13 +3008,17 @@ FILE: src/widgets/videoSimilar/styles.module.scss
 .similar {
 	display: flex;
 	flex-direction: column;
-	gap: 40px;
+	gap: $spacing-1xl;
 }
 
 .title {
 	display: inline-flex;
 	align-self: center;
-	color: $color-primary;
+	padding: $spacing-2sm $spacing-xl;
+	color: $color-secondary;
+	background-color: $color-primary;
+	border-radius: $radius-lg;
+	text-transform: capitalize;
 }
 
 

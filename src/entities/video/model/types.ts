@@ -1,5 +1,9 @@
-export interface Genres {
+export interface Genre {
 	genre: string;
+}
+
+export interface Country {
+	country: string;
 }
 
 export interface SimilarFilm {
@@ -31,8 +35,8 @@ export interface Video {
 	ratingImdb: number;
 	description: string;
 	shortDescription: string;
-	countries: string[];
-	genres: Genres[];
+	countries: Country[];
+	genres: Genre[];
 	year: number;
 	type: string;
 }

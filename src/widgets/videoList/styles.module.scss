@@ -1,4 +1,5 @@
-.list {
+.list,
+.listSkeleton {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, 315px);
 	gap: $spacing-lg;
@@ -17,4 +18,10 @@
 		grid-template-columns: minmax(0, 1fr);
 		justify-content: stretch;
 	}
+}
+
+.itemSkeleton {
+	@include skeleton-pulse;
+	width: 315px;
+	height: 315px;
 }
