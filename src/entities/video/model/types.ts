@@ -22,6 +22,7 @@ export interface SimilarFilmsResponse {
 }
 
 export interface Video {
+	filmId: number;
 	kinopoiskId: number;
 	imdbId: string;
 	nameRu: string;
@@ -55,4 +56,11 @@ export interface Staff {
 	posterUrl: string;
 	professionText: string;
 	professionKey: string;
+}
+
+export interface SearchByKeywordResponse {
+	keyword: string;
+	pagesCount: number;
+	searchFilmsCountResult: number;
+	films: Video[];
 }

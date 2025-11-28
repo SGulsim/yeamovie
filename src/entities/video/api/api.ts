@@ -4,10 +4,12 @@ import type {
 	Video,
 	VideosApiResponse,
 	SimilarFilmsResponse,
+	SearchByKeywordResponse,
 } from '../model/types';
 
 const BASE_URL = import.meta.env.VITE_VIDEOS_BASE_URL;
 const STAFF_URL = import.meta.env.VITE_VIDEOS_STAFF_URL;
+const SEARCH_URL = import.meta.env.VITE_VIDEOS_SEARCH_URL;
 const API_KEY = import.meta.env.VITE_VIDEOS_API_KEY;
 
 export const videosApi = createApi({
@@ -21,7 +23,7 @@ export const videosApi = createApi({
 		},
 	}),
 	endpoints: builder => ({
-		getMovies: builder.query<VideosApiResponse, null>({
+		getMovies: builder.query<VideosApiResponse, string>({
 			keepUnusedDataFor: 0,
 			query: category => ({
 				url: `films/collections`,
@@ -42,6 +44,13 @@ export const videosApi = createApi({
 				params: { filmId: id },
 			}),
 		}),
+		getMovieBySearch: builder.query<SearchByKeywordResponse, string>({
+			keepUnusedDataFor: 0,
+			query: keyword => ({
+				url: `${SEARCH_URL}/films/search-by-keyword`,
+				params: { keyword },
+			}),
+		}),
 		getSimilarMovies: builder.query<SimilarFilmsResponse, string>({
 			keepUnusedDataFor: 0,
 			query: id => ({
@@ -57,4 +66,5 @@ export const {
 	useGetMovieByIdQuery,
 	useGetStaffByIdQuery,
 	useGetSimilarMoviesQuery,
+	useGetMovieBySearchQuery,
 } = videosApi;

@@ -1,6 +1,6 @@
 import { useGetMoviesQuery } from '@/entities/video';
 
-export const useVideos = (limit: number, category?: string) => {
+export const useVideos = (limit: number, category: string) => {
 	const { data, isLoading, isError } = useGetMoviesQuery(category);
 
 	if (!data) {
