@@ -2,11 +2,16 @@ import styles from './styles.module.scss';
 import VideoHero from '@/entities/video/ui/VideoHero/VideoHero';
 import { useVideos } from '@/shared/hooks/useVideos';
 import Image from '@/shared/ui/Image/Image';
+import HeroBannerSkeleton from './HeroBannerSkeleton';
 
 const HeroBanner = () => {
-	const { items } = useVideos(1);
+	const { items, isLoading } = useVideos(1);
 	const { kinopoiskId, nameRu, description, shortDescription, posterUrl } =
 		items?.[0] || {};
+
+	if (isLoading) {
+		return <HeroBannerSkeleton />;
+	}
 
 	return (
 		<section className={styles.banner}>

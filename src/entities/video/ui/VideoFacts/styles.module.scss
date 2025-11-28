@@ -1,6 +1,5 @@
 .facts {
 	color: $color-primary;
-	max-width: 300px;
 }
 
 .title {
@@ -12,9 +11,4 @@
 	flex-direction: column;
 	gap: $spacing-lg;
 	color: $color-text;
-}
-
-.item {
-	display: flex;
-	justify-content: space-between;
 }

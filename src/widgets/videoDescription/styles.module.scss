@@ -1,11 +1,36 @@
-.info {
+.info,
+.infoSkeleton {
 	display: flex;
 	gap: $spacing-2xl;
 	@include section-spacing(calc($spacing-3xl + $spacing-lg));
 }
 
-.description {
+.detailsSkeleton {
 	display: flex;
 	flex-direction: column;
-	gap: $spacing-3xl;
+	gap: 30px;
+}
+
+.imageSkeleton {
+	width: 100%;
+	max-width: 482px;
+	aspect-ratio: 482 / 650;
+}
+
+.movieNameSkeleton,
+.btnsSkeleton {
+	width: 316px;
+	height: 95px;
+}
+
+.descriptionSkeleton {
+	width: 482px;
+	height: 400px;
+}
+
+.imageSkeleton,
+.descriptionSkeleton,
+.movieNameSkeleton,
+.btnsSkeleton {
+	@include skeleton-pulse;
 }
