@@ -1,43 +1,16 @@
+// collect-project.mjs
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// ============================================
-// НАСТРОЙКИ
-// ============================================
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const OUTPUT_FILE = 'project-context.txt';
+const PROJECT_ROOT = path.resolve(__dirname);
+const OUTPUT_FILE = path.join(__dirname, 'project-content.txt');
 
-// Папки для сканирования
-const INCLUDE_DIRS = ['src', 'public'];
-
-// Файлы в корне проекта
-const INCLUDE_ROOT_FILES = [
-	'package.json',
-	'vite.config.ts',
-	'tsconfig.json',
-	'tsconfig.node.json',
-	'.eslintrc.cjs',
-	'index.html',
-];
-
-// Расширения файлов для включения
-const INCLUDE_EXTENSIONS = [
-	'.ts',
-	'.tsx',
-	'.js',
-	'.jsx',
-	'.scss',
-	'.css',
-	'.json',
-	'.html',
-	'.md',
-];
-
-// Исключения (папки и файлы)
-const EXCLUDE_PATTERNS = [
+// Файлы и папки которые нужно игнорировать
+const IGNORE_PATTERNS = [
 	'node_modules',
 	'dist',
 	'build',
@@ -45,140 +18,150 @@ const EXCLUDE_PATTERNS = [
 	'.vscode',
 	'.idea',
 	'coverage',
-	'.DS_Store',
-	'project-context.txt',
-	'collect-project.mjs',
+	'.tmp',
+	'package-lock.json',
+	'yarn.lock',
+	'pnpm-lock.yaml',
+	'project-content.txt',
 ];
 
-// ============================================
-// ФУНКЦИИ
-// ============================================
+// Расширения файлов которые нужно включить
+const INCLUDED_EXTENSIONS = [
+	'.ts',
+	'.tsx',
+	'.js',
+	'.jsx',
+	'.json',
+	'.html',
+	'.scss',
+	'.css',
+	'.md',
+	'.txt',
+	'.mjs',
+	'.cjs',
+];
 
-function shouldExclude(filePath) {
-	return EXCLUDE_PATTERNS.some(pattern => filePath.includes(pattern));
-}
-
-function shouldIncludeFile(filePath) {
+// Функция для удаления комментариев из разных типов файлов
+function removeComments(content, filePath) {
 	const ext = path.extname(filePath);
-	return INCLUDE_EXTENSIONS.includes(ext);
+
+	switch (ext) {
+		case '.ts':
+		case '.tsx':
+		case '.js':
+		case '.jsx':
+		case '.mjs':
+		case '.cjs':
+			// Удаление однострочных и многострочных комментариев
+			return content
+				.replace(/\/\*[\s\S]*?\*\//g, '')
+				.replace(/\/\/.*$/gm, '')
+				.trim();
+
+		case '.scss':
+		case '.css':
+			// Удаление CSS/SCSS комментариев
+			return content
+				.replace(/\/\*[\s\S]*?\*\//g, '')
+				.replace(/\/\/.*$/gm, '')
+				.trim();
+
+		case '.html':
+			// Удаление HTML комментариев
+			return content.replace(/<!--[\s\S]*?-->/g, '').trim();
+
+		case '.json':
+			// JSON не имеет комментариев в стандарте, но удаляем возможные
+			return content
+				.replace(/\/\*[\s\S]*?\*\//g, '')
+				.replace(/\/\/.*$/gm, '')
+				.trim();
+
+		default:
+			return content.trim();
+	}
 }
 
-function getRelativePath(filePath, baseDir) {
-	return path.relative(baseDir, filePath).replace(/\\/g, '/');
+// Функция для проверки нужно ли игнорировать файл/папку
+function shouldIgnore(filePath) {
+	const relativePath = path.relative(PROJECT_ROOT, filePath);
+	const name = path.basename(filePath);
+
+	return IGNORE_PATTERNS.some(
+		pattern => relativePath.includes(pattern) || name === pattern
+	);
 }
 
-function collectFiles(dir, baseDir, result = []) {
-	const items = fs.readdirSync(dir);
+// Функция для проверки нужно ли включить файл
+function shouldInclude(filePath) {
+	if (fs.statSync(filePath).isDirectory()) return false;
 
-	items.forEach(item => {
-		const fullPath = path.join(dir, item);
+	const ext = path.extname(filePath);
+	return INCLUDED_EXTENSIONS.includes(ext);
+}
 
-		if (shouldExclude(fullPath)) {
-			return;
+// Рекурсивное чтение директории
+function readDirectory(dirPath, fileList = []) {
+	const items = fs.readdirSync(dirPath);
+
+	for (const item of items) {
+		const fullPath = path.join(dirPath, item);
+
+		if (shouldIgnore(fullPath)) continue;
+
+		if (fs.statSync(fullPath).isDirectory()) {
+			readDirectory(fullPath, fileList);
+		} else if (shouldInclude(fullPath)) {
+			fileList.push(fullPath);
 		}
+	}
 
-		const stat = fs.statSync(fullPath);
-
-		if (stat.isDirectory()) {
-			collectFiles(fullPath, baseDir, result);
-		} else if (stat.isFile() && shouldIncludeFile(fullPath)) {
-			result.push(fullPath);
-		}
-	});
-
-	return result;
+	return fileList;
 }
 
-function generateOutput() {
-	const output = [];
-	const baseDir = process.cwd();
+// Основная функция
+function collectProject() {
+	console.log('🔍 Сбор файлов проекта...');
 
-	// ============================================
-	// ЗАГОЛОВОК
-	// ============================================
-	output.push('# PROJECT CONTEXT');
-	output.push('# Generated: ' + new Date().toISOString());
-	output.push('');
-	output.push('='.repeat(80));
-	output.push('');
+	const allFiles = readDirectory(PROJECT_ROOT);
+	console.log(`📁 Найдено файлов: ${allFiles.length}`);
 
-	// ============================================
-	// СТРУКТУРА ПРОЕКТА
-	// ============================================
-	output.push('## PROJECT STRUCTURE');
-	output.push('');
+	let outputContent = `# PROJECT CONTENT COLLECTION\n`;
+	outputContent += `# Generated: ${new Date().toISOString()}\n`;
+	outputContent += `# Total files: ${allFiles.length}\n\n`;
+	outputContent += '='.repeat(80) + '\n\n';
 
-	const allFiles = [];
+	for (const filePath of allFiles) {
+		try {
+			const relativePath = path.relative(PROJECT_ROOT, filePath);
+			const content = fs.readFileSync(filePath, 'utf8');
+			const contentWithoutComments = removeComments(content, filePath);
 
-	// Собираем файлы из корня
-	INCLUDE_ROOT_FILES.forEach(fileName => {
-		const filePath = path.join(baseDir, fileName);
-		if (fs.existsSync(filePath)) {
-			allFiles.push(filePath);
+			outputContent += `FILE: ${relativePath}\n`;
+			outputContent += '─'.repeat(80) + '\n\n';
+			outputContent += contentWithoutComments + '\n\n';
+			outputContent += '─'.repeat(80) + '\n\n';
+
+			console.log(`✅ Обработан: ${relativePath}`);
+		} catch (error) {
+			console.log(`❌ Ошибка при обработке: ${filePath}`, error.message);
 		}
-	});
+	}
 
-	// Собираем файлы из папок
-	INCLUDE_DIRS.forEach(dir => {
-		const dirPath = path.join(baseDir, dir);
-		if (fs.existsSync(dirPath)) {
-			const files = collectFiles(dirPath, baseDir);
-			allFiles.push(...files);
-		}
-	});
+	outputContent += '='.repeat(80) + '\n';
+	outputContent += '# END OF PROJECT CONTENT\n';
 
-	// Сортируем для удобства
-	allFiles.sort();
-
-	// Выводим дерево
-	allFiles.forEach(filePath => {
-		const relativePath = getRelativePath(filePath, baseDir);
-		output.push(`  ${relativePath}`);
-	});
-
-	output.push('');
-	output.push('='.repeat(80));
-	output.push('');
-
-	// ============================================
-	// СОДЕРЖИМОЕ ФАЙЛОВ
-	// ============================================
-	output.push('## FILES CONTENT');
-	output.push('');
-
-	allFiles.forEach(filePath => {
-		const relativePath = getRelativePath(filePath, baseDir);
-		const content = fs.readFileSync(filePath, 'utf-8');
-
-		output.push('─'.repeat(80));
-		output.push(`FILE: ${relativePath}`);
-		output.push('─'.repeat(80));
-		output.push('');
-		output.push(content);
-		output.push('');
-	});
-
-	output.push('='.repeat(80));
-	output.push('# END OF PROJECT CONTEXT');
-
-	return output.join('\n');
+	// Запись в файл
+	fs.writeFileSync(OUTPUT_FILE, outputContent, 'utf8');
+	console.log(`\n📄 Проект собран в: ${OUTPUT_FILE}`);
+	console.log(
+		`📊 Размер файла: ${(
+			Buffer.byteLength(outputContent, 'utf8') /
+			1024 /
+			1024
+		).toFixed(2)} MB`
+	);
 }
 
-// ============================================
-// ЗАПУСК
-// ============================================
-try {
-	console.log('📦 Collecting project files...');
-
-	const content = generateOutput();
-	fs.writeFileSync(OUTPUT_FILE, content, 'utf-8');
-
-	const stats = fs.statSync(OUTPUT_FILE);
-	const sizeKB = (stats.size / 1024).toFixed(2);
-
-	console.log('✅ Project context saved to:', OUTPUT_FILE);
-	console.log(`📊 File size: ${sizeKB} KB`);
-} catch (error) {
-	console.error('❌ Error:', error.message);
-	process.exit(1);
-}
+// Запуск
+collectProject();
