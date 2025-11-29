@@ -5,6 +5,10 @@ import type {
 	VideosApiResponse,
 	SimilarFilmsResponse,
 	SearchByKeywordResponse,
+	SearchParams,
+	VideoCategory,
+	FramesMovieResponse,
+	FilterParams,
 } from '../model/types';
 
 const BASE_URL = import.meta.env.VITE_VIDEOS_BASE_URL;
@@ -23,8 +27,8 @@ export const videosApi = createApi({
 		},
 	}),
 	endpoints: builder => ({
-		getMovies: builder.query<VideosApiResponse, string>({
-			keepUnusedDataFor: 0,
+		getMoviesByCategory: builder.query<VideosApiResponse, VideoCategory>({
+			keepUnusedDataFor: 60,
 			query: category => ({
 				url: `films/collections`,
 				params: {
@@ -33,38 +37,58 @@ export const videosApi = createApi({
 				},
 			}),
 		}),
+		getSimilarMovies: builder.query<SimilarFilmsResponse, string>({
+			keepUnusedDataFor: 60,
+			query: id => ({
+				url: `films/${id}/similars`,
+				params: { filmId: id },
+			}),
+		}),
+		getFramesOfMovie: builder.query<FramesMovieResponse, string>({
+			keepUnusedDataFor: 60,
+			query: id => ({
+				url: `films/${id}/images`,
+				params: { type: 'STILL', page: 1 },
+			}),
+		}),
+		getMoviesByFilters: builder.query<VideosApiResponse, FilterParams>({
+			keepUnusedDataFor: 60,
+			query: filters => ({
+				url: `films`,
+				params: {
+					...(filters.genre && { genre: filters.genre }),
+					...(filters.country && { country: filters.country }),
+					page: 1,
+				},
+			}),
+		}),
 		getMovieById: builder.query<Video, string>({
-			keepUnusedDataFor: 0,
+			keepUnusedDataFor: 60,
 			query: id => `films/${id}`,
 		}),
 		getStaffById: builder.query<Staff[], string>({
-			keepUnusedDataFor: 0,
+			keepUnusedDataFor: 60,
 			query: id => ({
-				url: `${STAFF_URL}/staff`,
+				url: `${STAFF_URL}staff`,
 				params: { filmId: id },
 			}),
 		}),
 		getMovieBySearch: builder.query<SearchByKeywordResponse, string>({
-			keepUnusedDataFor: 0,
+			keepUnusedDataFor: 60,
 			query: keyword => ({
 				url: `${SEARCH_URL}/films/search-by-keyword`,
 				params: { keyword },
-			}),
-		}),
-		getSimilarMovies: builder.query<SimilarFilmsResponse, string>({
-			keepUnusedDataFor: 0,
-			query: id => ({
-				url: `films/${id}/similars`,
-				params: { filmId: id },
 			}),
 		}),
 	}),
 });
 
 export const {
-	useGetMoviesQuery,
 	useGetMovieByIdQuery,
-	useGetStaffByIdQuery,
-	useGetSimilarMoviesQuery,
 	useGetMovieBySearchQuery,
+	useGetMoviesByCategoryQuery,
+	useGetSimilarMoviesQuery,
+	useGetStaffByIdQuery,
+	useGetFramesOfMovieQuery,
+	useGetMoviesByFiltersQuery,
 } = videosApi;

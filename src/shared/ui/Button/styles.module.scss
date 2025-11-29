@@ -42,12 +42,12 @@
 }
 
 .outline {
-	color: $color-accent;
-	background-color: transparent;
-	border: 1px solid $color-accent;
+	color: $color-secondary;
+	background-color: $color-primary;
+	border: 1px solid $color-primary;
 
 	&:hover:not(.disabled) {
-		@include hover-background($color-accent, 0.1);
+		@include hover-background($color-primary, 0.1);
 	}
 }
 

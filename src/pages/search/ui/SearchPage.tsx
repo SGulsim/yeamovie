@@ -1,9 +1,10 @@
+import Title from '@/shared/ui/Title/Title';
 import SearchResults from '@/widgets/searchResults/SearchResults';
 
 const SearchPage = () => {
 	return (
 		<main>
-			<h3>Результаты поиска</h3>
+			<Title>Результаты поиска</Title>
 			<SearchResults />
 		</main>
 	);

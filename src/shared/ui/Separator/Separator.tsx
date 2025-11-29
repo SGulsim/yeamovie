@@ -3,11 +3,15 @@ import arrowRight from '@shared/assets/icons/arrowRight.svg';
 import arrowDown from '@shared/assets/icons/arrowDown.svg';
 import arrowUp from '@shared/assets/icons/arrowUp.svg';
 import arrowSelect from '@shared/assets/icons/arrowSelect.svg';
+import type { SeparatorType } from '@/shared/types/types';
+interface Props {
+	direction: SeparatorType;
+}
 
-const Separator = ({ direction = 'left' }) => {
+const Separator = ({ direction }: Props) => {
 	const icons = {
-		left: arrowLeft,
-		right: arrowRight,
+		back: arrowLeft,
+		next: arrowRight,
 		up: arrowUp,
 		down: arrowDown,
 		select: arrowSelect,

@@ -1,30 +1,39 @@
 import styles from './styles.module.scss';
-import { Breadcrumbs } from '@/features/breadcrumbs';
+import { Breadcrumbs } from '@/features';
 import Tab from '@/shared/ui/Tab/Tab';
 import Tabs from '@/shared/ui/Tabs/Tabs';
-import VideoList from '../videoList/VideoList';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useVideos } from '@/shared/hooks/useVideos';
+import { VideoList, type VideoCategory } from '@/entities/video';
+import VideoListSkeleton from '@/entities/video/ui/VideoList/VideoListSkeleton';
 
 const ContentCatalog = () => {
-	const navigate = useNavigate();
+	const [activeCategory, setActiveCategory] = useState('TOP_POPULAR_MOVIES');
+	const { items, isLoading } = useVideos(activeCategory as VideoCategory);
+
+	if (isLoading) return <VideoListSkeleton count={12} />;
 
 	return (
 		<section className={styles.content}>
 			<Tabs defaultActiveIndex={0}>
-				<Tab label='Популярные фильмы'>
-					<VideoList limit={12} category={'TOP_POPULAR_MOVIES'} />
-				</Tab>
-				<Tab label='Популярные сериалы'>
-					<VideoList limit={12} category={'POPULAR_SERIES'} />
-				</Tab>
-				<Tab label='Подборка фильмов'>
-					<VideoList limit={12} category={'TOP_250_MOVIES'} />
-				</Tab>
+				<Tab
+					label='Популярные фильмы'
+					onClick={() => setActiveCategory('TOP_POPULAR_MOVIES')}
+				/>
+				<Tab
+					label='Популярные сериалы'
+					onClick={() => setActiveCategory('POPULAR_SERIES')}
+				/>
+				<Tab
+					label='Подборка фильмов'
+					onClick={() => setActiveCategory('TOP_250_MOVIES')}
+				/>
 			</Tabs>
-			<Breadcrumbs>
-				<Breadcrumbs.Item children={'Смотреть все'} to={'movie'} />
+
+			<Breadcrumbs to={'/movie'} direction='next'>
+				Смотреть все
 			</Breadcrumbs>
-			<VideoList limit={12} />
+			<VideoList items={items} limit={12} />
 		</section>
 	);
 };

@@ -1,15 +1,11 @@
 import styles from './styles.module.scss';
-
+import type { ReactNode } from 'react';
 interface Props {
-	title: string;
+	children: ReactNode;
 }
 
-const Title = ({ title }: Props) => {
-	return (
-		<div>
-			<h2 className={styles.title}>{title}</h2>
-		</div>
-	);
+const Title = ({ children }: Props) => {
+	return <h3 className={styles.title}>{children}</h3>;
 };
 
 export default Title;

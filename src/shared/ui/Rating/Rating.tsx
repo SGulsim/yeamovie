@@ -1,13 +1,13 @@
 import styles from './styles.module.scss';
-
+import type { ReactNode } from 'react';
 interface Props {
-	ratingKinopoisk: number;
+	children: ReactNode;
 }
 
-const Rating = ({ ratingKinopoisk }: Props) => {
+const Rating = ({ children }: Props) => {
 	return (
 		<span className={styles.rating} aria-label='Рейтинг'>
-			⭐{ratingKinopoisk}/10
+			⭐{children ? children : 0}/10
 		</span>
 	);
 };

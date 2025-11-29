@@ -1,22 +1,30 @@
 import styles from './styles.module.scss';
 import FrameList from './FrameList/FrameList';
-import { Breadcrumbs } from '@/features/breadcrumbs';
-import { useGetMovieByIdQuery } from '@/entities/video/api/api';
-import { useParams } from 'react-router-dom';
+import { Breadcrumbs } from '@/features';
+import Title from '@/shared/ui/Title/Title';
+import { useFrames } from '@/shared/hooks/useFrames';
+import VideoListSkeleton from '@/entities/video/ui/VideoList/VideoListSkeleton';
+interface Props {
+	filmId: string;
+}
 
-const VideoFrames = () => {
-	const { id } = useParams<{ id: string }>();
-	const { data: video } = useGetMovieByIdQuery(id);
+const VideoFrames = ({ filmId }: Props) => {
+	const { items, isLoading } = useFrames(filmId);
+
+	if (isLoading) return <VideoListSkeleton count={6} />;
+
+	const frames = items ?? [];
+
+	if (frames.length === 0)
+		return <h3 className={styles.noframes}>Доступных кадров нет(</h3>;
 
 	return (
 		<section className={styles.frames}>
-			<h3 className={styles.title}>Кадры из фильма</h3>
-			<Breadcrumbs>
-				<Breadcrumbs.Item to='/' direction='next'>
-					Смотреть все
-				</Breadcrumbs.Item>
+			<Title>Кадры из фильма</Title>
+			<Breadcrumbs to={'/'} direction='next'>
+				Смотреть все
 			</Breadcrumbs>
-			<FrameList video={video} />
+			<FrameList items={frames.slice(0, 6)} />
 		</section>
 	);
 };

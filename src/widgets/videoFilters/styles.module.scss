@@ -1,12 +1,3 @@
 .filters {
 	@include section-spacing(calc($spacing-3xl + $spacing-1xl));
 }
-
-.title {
-	display: inline-flex;
-	margin-bottom: $spacing-1xl;
-	padding: $spacing-2sm $spacing-xl;
-	color: $color-secondary;
-	background-color: $color-primary;
-	border-radius: $radius-lg;
-}

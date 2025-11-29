@@ -4,6 +4,10 @@
 	@include section-spacing(calc($spacing-3xl + $spacing-lg));
 }
 
+.noframes {
+	text-align: center;
+}
+
 .title {
 	display: inline-flex;
 	align-self: center;
