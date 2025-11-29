@@ -16,7 +16,6 @@ export type {
 	SimilarFilmsResponse,
 	Staff,
 	SearchByKeywordResponse,
-	SearchParams,
 	VideoCategory,
 } from './model/types';
 

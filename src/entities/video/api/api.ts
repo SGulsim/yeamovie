@@ -5,7 +5,6 @@ import type {
 	VideosApiResponse,
 	SimilarFilmsResponse,
 	SearchByKeywordResponse,
-	SearchParams,
 	VideoCategory,
 	FramesMovieResponse,
 	FilterParams,
