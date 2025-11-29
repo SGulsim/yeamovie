@@ -1,18 +1,31 @@
+import { useNavigate } from 'react-router';
 import styles from './styles.module.scss';
 import Button from '@/shared/ui/Button/Button';
-
 interface Props {
-	title?: string;
-	description?: string;
+	id: string;
+	title: string;
+	description: string;
 }
 
-const VideoDetails = ({ title, description }: Props) => {
+const VideoDetails = ({ id, title, description }: Props) => {
+	const navigate = useNavigate();
 	return (
 		<div className={styles.details}>
-			<h1 className={styles.movieName}>{title}</h1>
+			<h2 className={styles.title}>{title}</h2>
 			<p className={styles.description}>{description}</p>
 			<div className={styles.btns}>
-				<Button onClick={() => 'click'} ariaLabel='Добавить в избранное'>
+				<Button
+					variant='outline'
+					onClick={() => navigate(`/movie/${id}`)}
+					ariaLabel='Смотреть фильм'
+				>
+					Смотреть
+				</Button>
+				<Button
+					variant='secondary'
+					onClick={() => navigate(`/movie/${id}`)}
+					ariaLabel='Добавить в избранное'
+				>
 					Избранное
 				</Button>
 			</div>

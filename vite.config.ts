@@ -13,13 +13,15 @@ export default defineConfig({
 			'@features': path.resolve(__dirname, 'src/features'),
 			'@entities': path.resolve(__dirname, 'src/entities'),
 			'@shared': path.resolve(__dirname, 'src/shared'),
-			'@styles': path.resolve(__dirname, 'src/styles'),
 		},
 	},
 	css: {
 		preprocessorOptions: {
 			scss: {
-				additionalData: `@use "@/styles/utils" as *;`,
+				additionalData: `
+					@use "@/shared/styles/utils/variables" as *;
+					@use "@/shared/styles/utils/mixins" as *;
+				`,
 			},
 		},
 	},

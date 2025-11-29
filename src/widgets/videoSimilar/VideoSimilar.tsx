@@ -1,16 +1,21 @@
-import styles from './styles.module.scss';
-import { useGetSimilarMoviesQuery } from '@/entities/video/api/api';
-import { useParams } from 'react-router-dom';
-import VideoList from '../videoList/VideoList';
+import Title from '@/shared/ui/Title/Title';
+import { useSimilar } from '@/shared/hooks/useSimilar';
+import VideoListSkeleton from '@/entities/video/ui/VideoList/VideoListSkeleton';
+import { VideoList } from '@/entities/video';
+interface Props {
+	filmId: string;
+}
 
-const VideoSimilar = () => {
-	const { id } = useParams<{ id: string }>();
-	const { data: similar } = useGetSimilarMoviesQuery(id);
+const VideoSimilar = ({ filmId }: Props) => {
+	const { items, isLoading } = useSimilar(filmId);
+
+	if (isLoading) return <VideoListSkeleton count={4} />;
+	if (!items.length) return null;
 
 	return (
-		<section className={styles.similar}>
-			<h3 className={styles.title}>Возможно, вам понравится</h3>
-			<VideoList limit={4} />
+		<section>
+			<Title>Возможно, вам понравится</Title>
+			<VideoList items={items} limit={4} />
 		</section>
 	);
 };

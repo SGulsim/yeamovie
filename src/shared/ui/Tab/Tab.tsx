@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
 
 interface TabProps {
-	children: ReactNode;
 	label: string;
+	children?: ReactNode;
+	onClick?: () => void;
 }
 
 const Tab = ({ children }: TabProps) => {

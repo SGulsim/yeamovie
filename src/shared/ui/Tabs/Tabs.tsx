@@ -11,13 +11,19 @@ const Tabs = ({ children, defaultActiveIndex = 0 }: Props) => {
 	const [activeIndex, setActiveIndex] = useState(defaultActiveIndex);
 	const tabs = Array.isArray(children) ? children : [children];
 
+	const handleTabClick = (index: number) => {
+		const tab = tabs[index];
+		setActiveIndex(index);
+		tab.props.onClick?.();
+	};
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.tabs}>
 				{tabs.map((tab, index) => (
 					<Button
 						key={index}
-						onClick={() => setActiveIndex(index)}
+						onClick={() => handleTabClick(index)}
 						variant='secondary'
 						active={activeIndex === index}
 					>

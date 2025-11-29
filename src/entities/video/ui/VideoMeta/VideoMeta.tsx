@@ -1,21 +1,29 @@
 import styles from './styles.module.scss';
 import Year from '@/shared/ui/Year/Year';
+import type { Video, VideoLike } from '../../model/types';
 import Rating from '@/shared/ui/Rating/Rating';
-import Title from '@/shared/ui/Title/Title';
-import type { Video } from '../../model/types';
 
+const isFullVideo = (video: VideoLike): video is Video =>
+	'kinopoiskId' in video;
 interface Props {
-	video: Video;
+	video: VideoLike;
 }
 
 const VideoMeta = ({ video }: Props) => {
+	const title =
+		video.nameRu || video.nameEn || video.nameOriginal || 'Без названия';
+
+	const isMovie = isFullVideo(video);
+	const year = isMovie ? video.year : undefined;
+	const rating = isMovie ? video.ratingKinopoisk : undefined;
+
 	return (
 		<div className={styles.meta}>
 			<div className={styles.info}>
-				<Title title={video.nameRu} />
-				<Year year={video.year} />
+				<h4 className={styles.title}>{title}</h4>
+				<Year>{year}</Year>
 			</div>
-			<Rating ratingKinopoisk={video.ratingKinopoisk} />
+			<Rating>{rating}</Rating>
 		</div>
 	);
 };

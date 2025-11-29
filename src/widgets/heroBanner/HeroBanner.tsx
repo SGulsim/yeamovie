@@ -1,26 +1,26 @@
 import styles from './styles.module.scss';
 import VideoHero from '@/entities/video/ui/VideoHero/VideoHero';
-import { useVideos } from '@/shared/hooks/useVideos';
 import Image from '@/shared/ui/Image/Image';
+import { useVideos } from '@/shared/hooks/useVideos';
 import HeroBannerSkeleton from './HeroBannerSkeleton';
 
 const HeroBanner = () => {
-	const { items, isLoading } = useVideos(1);
-	const { kinopoiskId, nameRu, description, shortDescription, posterUrl } =
-		items?.[0] || {};
+	const { items, isLoading } = useVideos('TOP_POPULAR_MOVIES');
 
-	if (isLoading) {
-		return <HeroBannerSkeleton />;
-	}
+	const data = items[0];
+
+	if (isLoading) return <HeroBannerSkeleton />;
 
 	return (
 		<section className={styles.banner}>
 			<VideoHero
-				id={kinopoiskId}
-				title={nameRu}
-				description={shortDescription ? shortDescription : description}
+				id={data.kinopoiskId}
+				title={data.nameRu}
+				description={
+					data.shortDescription ? data.shortDescription : data.description
+				}
 			/>
-			<Image src={posterUrl} alt={'banner'} type='banner' />
+			<Image src={data.posterUrl} alt={'banner'} type='banner' />
 		</section>
 	);
 };

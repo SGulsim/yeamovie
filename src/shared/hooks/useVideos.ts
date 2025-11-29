@@ -1,7 +1,8 @@
-import { useGetMoviesQuery } from '@/entities/video';
+import type { VideoCategory } from '@/entities/video';
+import { useGetMoviesByCategoryQuery } from '@/entities/video/api/api';
 
-export const useVideos = (limit: number, category: string) => {
-	const { data, isLoading, isError } = useGetMoviesQuery(category);
+export const useVideos = (category: VideoCategory = 'TOP_POPULAR_MOVIES') => {
+	const { data, isLoading, isError } = useGetMoviesByCategoryQuery(category);
 
 	if (!data) {
 		return {
@@ -11,22 +12,11 @@ export const useVideos = (limit: number, category: string) => {
 		};
 	}
 
-	if (limit) {
-		const limitedItems = data?.items.slice(0, limit);
-		return {
-			items: limitedItems || [],
-			total: data?.total || 0,
-			totalPages: data?.totalPages || 0,
-			isLoading,
-			isError,
-		};
-	} else {
-		return {
-			items: data?.items || [],
-			total: data?.total || 0,
-			totalPages: data?.totalPages || 0,
-			isLoading,
-			isError,
-		};
-	}
+	return {
+		items: data?.items || [],
+		total: data?.total || 0,
+		totalPages: data?.totalPages || 0,
+		isLoading,
+		isError,
+	};
 };

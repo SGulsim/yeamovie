@@ -1,19 +1,20 @@
 import VideoDescription from '@/widgets/videoDescription/VideoDescription';
-import { Breadcrumbs } from '@/features/breadcrumbs';
+import { Breadcrumbs } from '@/features';
 import VideoFrames from '@/widgets/videoFrames/ui/VideoFrames';
 import VideoSimilar from '@/widgets/videoSimilar/VideoSimilar';
+import { useParams } from 'react-router';
 
 const VideoPage = () => {
+	const { id } = useParams<{ id: string }>();
+
 	return (
 		<main>
-			<Breadcrumbs>
-				<Breadcrumbs.Item to={'/'} direction='back'>
-					Главная
-				</Breadcrumbs.Item>
+			<Breadcrumbs to={'/'} direction={'back'}>
+				Главная
 			</Breadcrumbs>
-			<VideoDescription />
-			<VideoFrames />
-			<VideoSimilar />
+			<VideoDescription filmId={id!} />
+			<VideoFrames filmId={id!} />
+			<VideoSimilar filmId={id!} />
 		</main>
 	);
 };

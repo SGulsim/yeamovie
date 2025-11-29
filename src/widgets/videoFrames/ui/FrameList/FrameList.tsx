@@ -1,68 +1,24 @@
 import styles from './styles.module.scss';
-import type { Video } from '@/entities/video';
+import type { Frame } from '@/entities/video/model/types';
 import Image from '@/shared/ui/Image/Image';
-
 interface Props {
-	video?: Video;
+	items: Frame[];
 }
 
-const FrameList = ({ video }: Props) => {
+const FrameList = ({ items }: Props) => {
 	return (
 		<ul className={styles.list}>
-			<li className={styles.frame}>
-				{
-					<Image
-						src={video?.posterUrlPreview}
-						alt={video?.nameRu}
-						type='frame'
-					/>
-				}
-			</li>
-			<li className={styles.frame}>
-				{
-					<Image
-						src={video?.posterUrlPreview}
-						alt={video?.nameRu}
-						type='frame'
-					/>
-				}
-			</li>
-			<li className={styles.frame}>
-				{
-					<Image
-						src={video?.posterUrlPreview}
-						alt={video?.nameRu}
-						type='frame'
-					/>
-				}
-			</li>
-			<li className={styles.frame}>
-				{
-					<Image
-						src={video?.posterUrlPreview}
-						alt={video?.nameRu}
-						type='frame'
-					/>
-				}
-			</li>
-			<li className={styles.frame}>
-				{
-					<Image
-						src={video?.posterUrlPreview}
-						alt={video?.nameRu}
-						type='frame'
-					/>
-				}
-			</li>
-			<li className={styles.frame}>
-				{
-					<Image
-						src={video?.posterUrlPreview}
-						alt={video?.nameRu}
-						type='frame'
-					/>
-				}
-			</li>
+			{items.map(({ imageUrl, previewUrl }) => (
+				<li key={imageUrl} className={styles.frame}>
+					{
+						<Image
+							src={imageUrl || previewUrl}
+							alt={'Кадры фильма'}
+							type='frame'
+						/>
+					}
+				</li>
+			))}
 		</ul>
 	);
 };

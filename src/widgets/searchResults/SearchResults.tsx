@@ -1,21 +1,23 @@
 import styles from './styles.module.scss';
 import { useSearch } from '@/shared/hooks/useSearch';
-import { useState } from 'react';
+import { useSearchParams } from 'react-router';
+import VideoListSkeleton from '@/entities/video/ui/VideoList/VideoListSkeleton';
+import SearchVideoCard from '../searchVideoCard/SearchVideoCard';
 
 const SearchResults = () => {
-	const [searchQuery, setSearchQuery] = useState('');
-	const data = useSearch(searchQuery);
-	console.log(data);
+	const [params] = useSearchParams();
+	const query = params.get('query') ?? '';
+	const { films, isLoading } = useSearch(query);
+
+	if (isLoading) return <VideoListSkeleton count={12} />;
+	if (!films.length) return <div>not found</div>;
 
 	return (
-		<div>
-			<input
-				type='text'
-				value={searchQuery}
-				onChange={e => setSearchQuery(e.target.value)}
-			/>
-			<div>{searchQuery}</div>
-		</div>
+		<ul className={styles.list}>
+			{films.map(video => (
+				<SearchVideoCard key={video.filmId} video={video} />
+			))}
+		</ul>
 	);
 };
 

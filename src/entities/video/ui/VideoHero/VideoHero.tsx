@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router';
 
 interface Props {
 	id: number;
-	title?: string;
-	description?: string;
+	title: string;
+	description: string;
 }
 
 const VideoHero = ({ id, title, description }: Props) => {

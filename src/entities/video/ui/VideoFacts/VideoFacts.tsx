@@ -7,22 +7,26 @@ import {
 	getActors,
 	getProducer,
 } from '../../lib/formatFacts';
+import { useMemo } from 'react';
 
 interface Props {
-	video?: Video;
-	staff?: Staff[];
+	video: Video;
+	staff: Staff[];
 }
 
 const VideoFacts = ({ video, staff }: Props) => {
-	if (!video || !staff) return null;
+	const facts = useMemo(
+		() => [
+			{ label: 'Жанр', value: formatGenres(video.genres) },
+			{ label: 'Страна', value: formatCountries(video.countries) },
+			{ label: 'Год', value: video.year },
+			{ label: 'Режиссер', value: getProducer(staff) },
+			{ label: 'В главных ролях', value: getActors(staff) },
+			{ label: 'Рейтинг', value: video.ratingKinopoisk },
+		],
+		[video, staff]
+	);
 
-	const facts = [
-		{ label: 'Жанр', value: formatGenres(video.genres) },
-		{ label: 'Страна', value: formatCountries(video.countries) },
-		{ label: 'Год', value: video?.year },
-		{ label: 'Режиссер', value: getProducer(staff) },
-		{ label: 'В главных ролях', value: getActors(staff) },
-	];
 	return (
 		<div className={styles.facts}>
 			<h3 className={styles.title}>О фильме</h3>

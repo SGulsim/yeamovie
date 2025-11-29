@@ -1,5 +1,5 @@
 import { Header, Footer } from '@/widgets';
-import '@styles/_global.scss';
+import '@shared/styles/_global.scss';
 import { Outlet, ScrollRestoration } from 'react-router-dom';
 
 export default function BaseLayout() {

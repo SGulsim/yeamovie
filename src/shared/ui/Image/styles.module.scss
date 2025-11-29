@@ -3,6 +3,13 @@
 	border-radius: $radius-sm;
 }
 
+.imageSkeleton {
+	@include skeleton-pulse;
+	border-radius: $radius-sm;
+	width: 355px;
+	height: 500px;
+}
+
 .banner {
 	object-fit: cover;
 	border-radius: $radius-sm;

@@ -1,21 +1,21 @@
 .breadcrumbs {
 	display: flex;
+
+	&.next {
+		justify-content: flex-end;
+	}
+
+	&.back {
+		justify-content: flex-start;
+	}
 }
 
-.breadcrumbsItem {
+.link {
 	@include flex-align($gap: $spacing-md);
 	@include transition(color);
 	margin-bottom: $spacing-lg;
 
 	&:hover {
 		color: $color-accent;
-	}
-
-	&.next {
-		margin-left: auto;
-	}
-
-	&.back {
-		margin-right: auto;
 	}
 }

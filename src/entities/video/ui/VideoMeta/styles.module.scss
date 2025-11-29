@@ -8,3 +8,17 @@
 	flex-direction: column;
 	gap: $spacing-xs;
 }
+
+.title {
+	color: $color-primary;
+}
+
+.tag {
+	align-self: flex-end;
+	padding: $spacing-2sm $spacing-sm;
+	border-radius: $radius-sm;
+	background-color: rgba($color-text, 0.15);
+	color: $color-primary;
+	font-size: $font-size-sm;
+	text-transform: lowercase;
+}
